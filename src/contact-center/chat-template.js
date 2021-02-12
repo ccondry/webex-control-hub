@@ -12,7 +12,7 @@ module.exports = class ChatTemplate {
   * @return {Promise} the fetch promise, which resolves to chat templates JSON
   * array when successful
   */
-  list () {
+  async list () {
     const url = 'https://cmm.produs1.ciscoccservice.com/cmm/v1/organization/' + this.params.orgId + '/template?mediaType=chat'
     const options = {
       headers: {

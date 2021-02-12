@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Node.js client for interacting with Cisco Webex Control Hub (admin.webex.com) REST APIs",
   "main": "src/index.js",
+  "scripts": {
+    "test": "node test"
+  },
   "repository": "https://github.com/ccondry/webex-control-hub.git",
   "author": "Coty Condry <ccondry@cisco.com>",
   "license": "MIT",

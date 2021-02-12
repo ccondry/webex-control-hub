@@ -8,5 +8,8 @@ const client = new lib({
 
 // client.contactCenter.chatTemplate.list()
 // client.user.list({count: 100, startIndex: 0})
-client.user.listAll()
-.then(r => console.log(r.length))
+// client.user.listAll()
+// client.contactCenter.treatment.list(process.env.EMAIL_ENTRY_POINT_ID)
+// client.contactCenter.virtualAssistant.list()
+.then(r => console.log(r))
+.catch(e => console.log(e.message))

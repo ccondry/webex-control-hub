@@ -6,8 +6,8 @@ module.exports = class {
     orgId,
     accessToken
   }) {
-    if (!orgId) throw Error('orgId is a required constructor paramter for webex-control-hub.')
-    if (!accessToken) throw Error('accessToken is a required constructor paramter for webex-control-hub.')
+    if (!orgId) throw Error('orgId is a required constructor parameter for webex-control-hub.')
+    if (!accessToken) throw Error('accessToken is a required constructor parameter for webex-control-hub.')
     this.params = {
       orgId,
       accessToken

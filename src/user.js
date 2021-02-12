@@ -2,8 +2,8 @@ const fetch = require('./utils/fetch')
 
 module.exports = class User {
   constructor (params) {
-    if (!params.orgId) throw Error('orgId is a required constructor paramter for webex-control-hub/contact-center/chat-template.')
-    if (!params.accessToken) throw Error('accessToken is a required constructor paramter for webex-control-hub/contact-center/chat-template.')
+    if (!params.orgId) throw Error('orgId is a required constructor parameter for webex-control-hub/contact-center/chat-template.')
+    if (!params.accessToken) throw Error('accessToken is a required constructor parameter for webex-control-hub/contact-center/chat-template.')
     this.params = params
   }
   

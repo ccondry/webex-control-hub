@@ -6,5 +6,7 @@ const client = new lib({
   accessToken: process.env.ACCESS_TOKEN
 })
 
-client.contactCenter.chatTemplate.list()
-.then(r => console.log(r))
+// client.contactCenter.chatTemplate.list()
+// client.user.list({count: 100, startIndex: 0})
+client.user.listAll()
+.then(r => console.log(r.length))

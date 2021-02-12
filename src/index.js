@@ -1,4 +1,5 @@
 const ContactCenter = require('./contact-center')
+const User = require('./user')
 
 module.exports = class {
   constructor ({
@@ -12,5 +13,6 @@ module.exports = class {
       accessToken
     }
     this.contactCenter = new ContactCenter(this.params)
+    this.user = new User(this.params)
   }
 }

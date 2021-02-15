@@ -11,5 +11,48 @@ const client = new lib({
 // client.user.listAll()
 // client.contactCenter.treatment.list(process.env.EMAIL_ENTRY_POINT_ID)
 // client.contactCenter.virtualAssistant.list()
+// client.user.get('e85201ed-85d7-4673-840e-b2dc21c44399')
+// client.user.get('sjeffers0325@cc1.dc-01.com')
+// client.user.onboard({
+//   email: 'sjeffers3280@cc1.dc-01.com',
+//   licenses: [
+//     {
+//       id: 'MS_fe3cfc81-8469-4929-8944-23e79e5d0d53',
+//       idOperation: 'ADD',
+//       properties: {}
+//     },
+//     {
+//       id: 'CJPPRM_1cf76371-2fde-4f72-8122-b6a9d2f89c73',
+//       idOperation: 'REMOVE',
+//       properties: {}
+//     }
+//   ]
+// })
+// client.user.modify({
+//   userId: 'e85201ed-85d7-4673-840e-b2dc21c44399',
+//   roles: [
+//     // 'cjp.standard_agent'
+//     'cjp.premium_agent',
+//     'cjp.supervisor',
+//     'id_readonly_admin'
+//   ]
+// })
+client.contactCenter.role.modify({
+  email: 'rbarrows0703@cc1.dc-01.com',
+  roles: [{
+    roleName: 'CJP_PREMIUM_AGENT',
+    roleState: 'ACTIVE'
+  }, {
+    roleName: 'CJP_SUPERVISOR',
+    roleState: 'ACTIVE'
+  }, {
+    roleName: 'CJP_STANDARD_AGENT',
+    roleState: 'INACTIVE'
+  }]
+})
 .then(r => console.log(r))
 .catch(e => console.log(e.message))
+
+// client.user.modify({userId: 'e8a93317-d79f-4b85-91af-0c908cd88980'})
+// .then(r => console.log(r))
+// .catch(e => console.log(e.message))

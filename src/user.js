@@ -74,5 +74,73 @@ module.exports = class User {
     }
     return ret
   }
-}
 
+  /**
+  * Get user details
+  * @param {String} userId the Control Hub user ID of the user to work on
+  * @return {Promise} the fetch promise, which resolves to users JSON array when
+  * successful
+  */
+  async get (userId) {
+    const url = `https://identity.webex.com/identity/scim/${this.params.orgId}/v1/Users/${userId}`
+    const options = {
+      headers: {
+        Authorization: 'Bearer ' + this.params.accessToken
+      }
+    }
+    return fetch(url, options)
+  }
+
+  /**
+  * Onboard a user with specified licenses
+  * @param {String} userId the Control Hub user ID of the user to work on
+  * @param {String} licenses the Control Hub user ID of the user to work on
+  * @return {Promise} the fetch promise, which resolves to users JSON array when
+  * successful
+  */
+  async onboard ({email, licenses = []}) {
+    const url = `https://license-a.wbx2.com/license/api/v1/organization/${this.params.orgId}/users/onboard`
+    const options = {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${this.params.accessToken}`
+      },
+      body: [{
+        email,
+        licenses,
+        userEntitlements: [],
+        extendedSiteAccounts: [],
+        onboardMethod: null
+      }]
+    }
+    return fetch(url, options)
+  }
+
+  /**
+  * Modify a user 
+  * @param {String} userId the Control Hub user ID of the user to work on
+  * @param {String} licenses the Control Hub user ID of the user to work on
+  * @return {Promise} the fetch promise, which resolves to users JSON array when
+  * successful
+  */
+  async modify ({userId}) {
+    const url = `https://identity.webex.com/identity/scim/${this.params.orgId}/v1/Users/${userId}`
+    const body = {
+      schemas: [
+        'urn:scim:schemas:core:1.0',
+        'urn:scim:schemas:extension:cisco:commonidentity:1.0'
+      ],
+      roles: [
+        'id_readonly_admin'
+      ]
+    }
+    const options = {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Bearer ${this.params.accessToken}`
+      },
+      body
+    }
+    return fetch(url, options)
+  }
+}

@@ -1,6 +1,7 @@
 const ChatTemplate = require('./chat-template')
 const Treatment = require('./treatment')
 const VirtualAssistant = require('./virtual-assistant')
+const Role = require('./role')
 
 module.exports = class ContactCenter {
   constructor (params) {
@@ -11,5 +12,6 @@ module.exports = class ContactCenter {
     this.chatTemplate = new ChatTemplate(this.params)
     this.treatment = new Treatment(this.params)
     this.virtualAssistant = new VirtualAssistant(this.params)
+    this.role = new Role(this.params)
   }
 }

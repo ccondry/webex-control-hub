@@ -119,20 +119,18 @@ module.exports = class User {
   /**
   * Modify a user 
   * @param {String} userId the Control Hub user ID of the user to work on
-  * @param {String} licenses the Control Hub user ID of the user to work on
+  * @param {String} roles the Control Hub roles to add to the user. roles can only be added using this route.
   * @return {Promise} the fetch promise, which resolves to users JSON array when
   * successful
   */
-  async modify ({userId}) {
+  async modify ({userId, roles = ['id_readonly_admin']}) {
     const url = `https://identity.webex.com/identity/scim/${this.params.orgId}/v1/Users/${userId}`
     const body = {
       schemas: [
         'urn:scim:schemas:core:1.0',
         'urn:scim:schemas:extension:cisco:commonidentity:1.0'
       ],
-      roles: [
-        'id_readonly_admin'
-      ]
+      roles
     }
     const options = {
       method: 'PATCH',

@@ -1,5 +1,6 @@
 const ContactCenter = require('./contact-center')
 const User = require('./user')
+const Org = require('./org')
 
 module.exports = class {
   constructor ({
@@ -14,5 +15,6 @@ module.exports = class {
     }
     this.contactCenter = new ContactCenter(this.params)
     this.user = new User(this.params)
+    this.org = new Org(this.params)
   }
 }

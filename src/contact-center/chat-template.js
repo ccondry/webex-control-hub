@@ -5,6 +5,7 @@ module.exports = class ChatTemplate {
     if (!params.orgId) throw Error('orgId is a required constructor parameter for webex-control-hub/contact-center/chat-template.')
     if (!params.accessToken) throw Error('accessToken is a required constructor parameter for webex-control-hub/contact-center/chat-template.')
     this.params = params
+    this.urlBase = `https://cmm.produs1.ciscoccservice.com/cmm/v1/organization/${this.params.orgId}/template`
   }
   
   /**
@@ -13,13 +14,29 @@ module.exports = class ChatTemplate {
   * array when successful
   */
   async list () {
-    const url = 'https://cmm.produs1.ciscoccservice.com/cmm/v1/organization/' + this.params.orgId + '/template'
+    const url = this.urlBase
     const options = {
       headers: {
         Authorization: 'Bearer ' + this.params.accessToken
       },
       query: {
         mediaType: 'chat'
+      }
+    }
+    return fetch(url, options)
+  }
+  
+  /**
+  * Deletes a chat template
+  * @return {Promise} the fetch promise, which resolves to the response JSON
+  * object when successful
+  */
+  async delete (id) {
+    const url = `${this.urlBase}/${id}`
+    const options = {
+      method: 'DELETE',
+      headers: {
+        Authorization: 'Bearer ' + this.params.accessToken
       }
     }
     return fetch(url, options)

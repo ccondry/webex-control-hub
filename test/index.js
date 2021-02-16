@@ -37,20 +37,27 @@ const client = new lib({
 //     'id_readonly_admin'
 //   ]
 // })
-client.contactCenter.role.modify({
-  email: 'rbarrows0703@cc1.dc-01.com',
-  roles: [{
-    roleName: 'CJP_PREMIUM_AGENT',
-    roleState: 'ACTIVE'
-  }, {
-    roleName: 'CJP_SUPERVISOR',
-    roleState: 'ACTIVE'
-  }, {
-    roleName: 'CJP_STANDARD_AGENT',
-    roleState: 'INACTIVE'
-  }]
-})
-.then(r => console.log(r))
+// client.contactCenter.role.modify({
+//   email: 'rbarrows0703@cc1.dc-01.com',
+//   roles: [{
+//     roleName: 'CJP_PREMIUM_AGENT',
+//     roleState: 'ACTIVE'
+//   }, {
+//     roleName: 'CJP_SUPERVISOR',
+//     roleState: 'ACTIVE'
+//   }, {
+//     roleName: 'CJP_STANDARD_AGENT',
+//     roleState: 'INACTIVE'
+//   }]
+// })
+// client.org.getMe()
+// client.org.getOrg()
+// client.org.getAvailableServices()
+// client.org.getAvailableDevices()
+// client.org.getLicenseUsage()
+// client.org.getDomainInfo()
+// client.org.getUserStatuses('46a269c1-d676-4277-820c-b46e16ece599')
+.then(r => console.log(JSON.stringify(r, null, 2)))
 .catch(e => console.log(e.message))
 
 // client.user.modify({userId: 'e8a93317-d79f-4b85-91af-0c908cd88980'})

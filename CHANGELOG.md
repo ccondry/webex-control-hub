@@ -2,6 +2,13 @@
 
 Dates are in YYYY-MM-DD format
 
+# 1.3.2 (2021-2-18)
+
+### Bug Fixes
+* **Fetch:** Remove duplicate fetch module, updating all references to point to
+the same place.
+
+
 # 1.3.1 (2021-2-18)
 
 ### Features

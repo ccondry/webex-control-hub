@@ -2,6 +2,13 @@
 
 Dates are in YYYY-MM-DD format
 
+# 1.3.1 (2021-2-18)
+
+### Features
+* **Compatibility:** Removed "URL" reference, for compatibility with older
+versions of Node.js
+
+
 # 1.3.0 (2021-2-16)
 
 ### Features

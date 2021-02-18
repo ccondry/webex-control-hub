@@ -1,4 +1,4 @@
-const fetch = require('../models/fetch')
+const fetch = require('../utils/fetch')
 
 module.exports = class Treatment {
   constructor (params) {

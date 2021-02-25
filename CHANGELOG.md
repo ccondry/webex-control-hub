@@ -2,6 +2,13 @@
 
 Dates are in YYYY-MM-DD format
 
+# 1.5.0 (2021-2-25)
+
+### Bug Fixes
+* **Contact Center:** Fix create and modify methods in chatTemplate. Modify now
+requires id as first paramter.
+
+
 # 1.4.0 (2021-2-25)
 
 ### Features

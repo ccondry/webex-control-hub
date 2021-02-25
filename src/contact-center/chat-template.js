@@ -49,8 +49,7 @@ module.exports = class ChatTemplate {
   */
   async create (body) {
     try {
-      const id = body.uri.split('/').pop()
-      const url = `https://cmm.produs1.ciscoccservice.com/cmm/v1/organization/${this.orgId}/template/${id}`
+      const url = this.urlBase
       const options = {
         method: 'POST',
         headers: {

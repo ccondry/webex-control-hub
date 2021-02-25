@@ -41,4 +41,50 @@ module.exports = class ChatTemplate {
     }
     return fetch(url, options)
   }
+  
+  /**
+  * Create a chat template
+  * @return {Promise} the fetch promise, which resolves to the response JSON
+  * object when successful
+  */
+  async create (body) {
+    try {
+      const id = body.uri.split('/').pop()
+      const url = `https://cmm.produs1.ciscoccservice.com/cmm/v1/organization/${this.orgId}/template/${id}`
+      const options = {
+        method: 'POST',
+        headers: {
+          Authorization: 'Bearer ' + this.params.accessToken
+        },
+        body
+      }
+      const response = await fetch(url, options)
+      return response
+    } catch (e) {
+      throw e
+    }
+  }
+  
+  /**
+  * modify a chat template
+  * @return {Promise} the fetch promise, which resolves to the response JSON
+  * object when successful
+  */
+  async modify (body) {
+    try {
+      const id = body.uri.split('/').pop()
+      const url = `https://cmm.produs1.ciscoccservice.com/cmm/v1/organization/${this.orgId}/template/${id}`
+      const options = {
+        method: 'PUT',
+        headers: {
+          Authorization: 'Bearer ' + this.params.accessToken
+        },
+        body
+      }
+      const response = await fetch(url, options)
+      return response
+    } catch (e) {
+      throw e
+    }
+  }
 }

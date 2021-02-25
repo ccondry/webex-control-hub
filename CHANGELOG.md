@@ -2,6 +2,12 @@
 
 Dates are in YYYY-MM-DD format
 
+# 1.6.0 (2021-2-25)
+
+### Features
+* **Contact Center:** Add get method to chatTemplate.
+
+
 # 1.5.0 (2021-2-25)
 
 ### Bug Fixes

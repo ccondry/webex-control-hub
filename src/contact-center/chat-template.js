@@ -63,16 +63,15 @@ module.exports = class ChatTemplate {
       throw e
     }
   }
-  
+
   /**
   * modify a chat template
   * @return {Promise} the fetch promise, which resolves to the response JSON
   * object when successful
   */
-  async modify (body) {
+  async modify (id, body) {
     try {
-      const id = body.uri.split('/').pop()
-      const url = `https://cmm.produs1.ciscoccservice.com/cmm/v1/organization/${this.orgId}/template/${id}`
+      const url = `${this.urlBase}/${id}`
       const options = {
         method: 'PUT',
         headers: {

@@ -2,6 +2,13 @@
 
 Dates are in YYYY-MM-DD format
 
+# 1.4.0 (2021-2-25)
+
+### Features
+* **Contact Center:** Add validate, create, validateIcon, modify methods to
+virtualAssistant. Add create, modify methods to chatTemplate.
+
+
 # 1.3.2 (2021-2-18)
 
 ### Bug Fixes

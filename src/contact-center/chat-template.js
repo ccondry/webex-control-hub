@@ -27,6 +27,21 @@ module.exports = class ChatTemplate {
   }
   
   /**
+  * Gets single chat template by template ID
+  * @return {Promise} the fetch promise, which resolves to chat templates JSON
+  * object when successful
+  */
+  async get (id) {
+    const url = `${this.urlBase}/${id}`
+    const options = {
+      headers: {
+        Authorization: 'Bearer ' + this.params.accessToken
+      }
+    }
+    return fetch(url, options)
+  }
+  
+  /**
   * Deletes a chat template
   * @return {Promise} the fetch promise, which resolves to the response JSON
   * object when successful

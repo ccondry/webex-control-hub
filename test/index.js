@@ -58,6 +58,7 @@ const client = new lib({
 // client.org.getDomainInfo()
 // client.org.getUserStatuses('46a269c1-d676-4277-820c-b46e16ece599')
 // client.user.modify({userId: 'e8a93317-d79f-4b85-91af-0c908cd88980'})
-client.contactCenter.ocis.fix('e8a93317-d79f-4b85-91af-0c908cd88980')
+// client.contactCenter.ocis.fix('e8a93317-d79f-4b85-91af-0c908cd88980')
+client.contactCenter.configGateway.listUsers()
 .then(r => console.log(JSON.stringify(r, null, 2)))
 .catch(e => console.log(e.message))

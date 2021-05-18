@@ -3,6 +3,7 @@ const Treatment = require('./treatment')
 const VirtualAssistant = require('./virtual-assistant')
 const Role = require('./role')
 const Ocis = require('./ocis')
+const ConfigGateway = require('./config-gateway')
 
 module.exports = class ContactCenter {
   constructor (params) {
@@ -15,5 +16,6 @@ module.exports = class ContactCenter {
     this.virtualAssistant = new VirtualAssistant(this.params)
     this.role = new Role(this.params)
     this.ocis = new Ocis(this.params)
+    this.configGateway = new ConfigGateway(this.params)
   }
 }

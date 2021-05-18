@@ -2,6 +2,13 @@
 
 Dates are in YYYY-MM-DD format
 
+# 1.8.0 (2021-5-18)
+
+### Features
+* **Config Gateway:** Add configGateway module to get list of users that are
+synced to CJP.
+
+
 # 1.7.0 (2021-3-18)
 
 ### Features

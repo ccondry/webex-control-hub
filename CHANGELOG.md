@@ -5,7 +5,7 @@ Dates are in YYYY-MM-DD format
 # 1.7.0 (2021-3-18)
 
 ### Features
-* **OCSI:** Add OCSI module to fix user login error related to "subscription ID.
+* **OCIS:** Add OCIS module to fix user login error related to "subscription ID.
 
 
 # 1.6.0 (2021-2-25)

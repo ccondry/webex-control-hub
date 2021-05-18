@@ -10,7 +10,7 @@ module.exports = class Ocis {
 
   /**
    * fix user subscription
-   * @param {String} userId the user ID
+   * @param {String} userId the bcUserId__s from CJP data
    * @return {Promise} the fetch promise, which resolves to the JSON
    * response when successful
    */

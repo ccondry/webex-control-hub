@@ -82,9 +82,6 @@ module.exports = class VirtualAssistant {
         headers: {
           Authorization: 'Bearer ' + this.params.accessToken
         },
-        query: {
-          orgId: this.params.orgId
-        },
         body
       }
       const response = await fetch(url, options)

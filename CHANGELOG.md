@@ -2,6 +2,14 @@
 
 Dates are in YYYY-MM-DD format
 
+
+# 1.8.1 (2021-6-6)
+
+### Fixes
+* **Contact Center:** Fixed virtualAssistant.create by removing the URL query
+and using the unique bot name for the credentials JSON file name.
+
+
 # 1.8.0 (2021-5-18)
 
 ### Features

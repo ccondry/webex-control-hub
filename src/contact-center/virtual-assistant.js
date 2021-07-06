@@ -65,6 +65,18 @@ module.exports = class VirtualAssistant {
   }) {
     try {
       const url = `${this.baseUrl}/config/organization/${this.params.orgId}/botconfig`
+      const body = {
+        type: 'dialogflowv2',
+        name,
+        config: {
+          serviceAccountKey,
+          keyName: name + '.json'
+        },
+        // icon: "data:image/png;base64,VBORw0KGgoAAAA...."
+        icon,
+        channels,
+        contextServiceFields: {}
+      }
       const options = {
         method: 'POST',
         headers: {
@@ -73,18 +85,7 @@ module.exports = class VirtualAssistant {
         query: {
           orgId: this.params.orgId
         },
-        body: {
-          type: 'dialogflowv2',
-          name,
-          config: {
-            serviceAccountKey,
-            keyName: 'cred.json'
-          },
-          // icon: "data:image/png;base64,VBORw0KGgoAAAA...."
-          icon,
-          channels,
-          contextServiceFields: {}
-        }
+        body
       }
       const response = await fetch(url, options)
       return response

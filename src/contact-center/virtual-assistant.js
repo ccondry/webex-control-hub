@@ -7,6 +7,7 @@ module.exports = class VirtualAssistant {
     this.params = params
     this.baseUrl = 'https://virtual-assistant.produs1.ciscoccservice.com/virtual-assistant/v1'
   }
+
   /**
    * Gets list of virtual assistants
    * @return {Promise} the fetch promise, which resolves to virtual assistants JSON
@@ -78,7 +79,7 @@ module.exports = class VirtualAssistant {
     serviceAccountKey,
     name,
     icon = '',
-    channels ='chat,voice'
+    channels = 'chat,voice'
   }) {
     try {
       const url = `${this.baseUrl}/config/organization/${this.params.orgId}/botconfig`

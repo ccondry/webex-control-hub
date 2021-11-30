@@ -28,11 +28,26 @@ module.exports = class VirtualAssistant {
   }
 
   /**
+   * Gets full data for one virtual assistant
+   * @return {Promise} the fetch promise, which resolves to virtual assistant JSON
+   * object when successful
+   */
+  get (id) {
+    const url = `${this.baseUrl}/config/organization/${this.params.orgId}/botconfig/${id}`
+    const options = {
+      headers: {
+        Authorization: 'Bearer ' + this.params.accessToken
+      }
+    }
+    return fetch(url, options)
+  }
+
+  /**
    * Validate a Google credentials JSON file has correct permissions
    * @return {Promise} the fetch promise, which resolves to virtual assistants JSON
    * array when successful
    */
-  async validate (body) {
+  validate (credentials) {
     try {
       const url = `${this.baseUrl}/validation/dialogflow/servicekey`
       const options = {

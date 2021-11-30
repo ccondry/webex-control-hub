@@ -3,6 +3,13 @@
 Dates are in YYYY-MM-DD format
 
 
+# 1.9.1 (2021-10-30)
+
+### Fixes
+* **Contact Center:** Set global regionId and dialogFlowProjectId fields when
+creating or modifying a virtual assistant.
+
+
 # 1.9.0 (2021-10-30)
 
 ### Fixes

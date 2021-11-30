@@ -3,6 +3,13 @@
 Dates are in YYYY-MM-DD format
 
 
+# 1.9.0 (2021-10-30)
+
+### Fixes
+* **Contact Center:** Fixed virtual assistant modify and validate functions,
+and added a get function.
+
+
 # 1.8.1 (2021-6-6)
 
 ### Fixes

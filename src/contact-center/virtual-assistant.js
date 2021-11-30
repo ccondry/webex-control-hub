@@ -85,7 +85,7 @@ module.exports = class VirtualAssistant {
         name,
         config: {
           serviceAccountKey,
-          keyName: name + '.json'
+          keyName: 'cred.json'
         },
         // icon: "data:image/png;base64,VBORw0KGgoAAAA...."
         icon,

@@ -88,7 +88,9 @@ module.exports = class VirtualAssistant {
         name,
         config: {
           serviceAccountKey,
-          keyName: 'cred.json'
+          keyName: 'cred.json',
+          regionId: 'global',
+          dialogFlowProjectId: serviceAccountKey.project_id
         },
         // icon: "data:image/png;base64,VBORw0KGgoAAAA...."
         icon,
@@ -143,6 +145,14 @@ module.exports = class VirtualAssistant {
     // fix body ID
     delete body.id
     body.botServicesConfigId = id
+    // make sure region ID is set
+    body.regionId = body.regionId || 'global'
+    // make sure dialogflow project ID is set in the config section
+    try {
+      body.config.dialogFlowProjectId = body.config.serviceAccountKey.project_id || body.config.dialogFlowProjectId
+    } catch (e) {
+      // continue?
+    }
     const url = `${this.baseUrl}/config/organization/${this.params.orgId}/botconfig/${id}`
     const options = {
       method: 'PUT',

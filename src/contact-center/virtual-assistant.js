@@ -58,10 +58,12 @@ module.exports = class VirtualAssistant {
         query: {
           orgId: this.params.orgId
         },
-        body
+        body: {
+          serviceAccountKey: credentials,
+          dialogFlowProjectId: credentials.project_id
+        }
       }
-      const response = await fetch(url, options)
-      return response
+      return fetch(url, options)
     } catch (e) {
       throw e
     }

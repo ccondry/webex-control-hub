@@ -119,26 +119,20 @@ module.exports = class VirtualAssistant {
 
   /**
    * modify a virtual assistant
-   * @return {Promise} the fetch promise, which resolves to virtual assistants JSON
-   * array when successful
+   * @return {Promise} the fetch promise, which resolves to fetch response body
    */
-  async modify (body) {
-    try {
-      const url = `${this.baseUrl}/validateIcon`
-      const options = {
-        method: 'PUT',
-        headers: {
-          Authorization: 'Bearer ' + this.params.accessToken
-        },
-        query: {
-          orgId: this.params.orgId
-        },
-        body
-      }
-      const response = await fetch(url, options)
-      return response
-    } catch (e) {
-      throw e
+  modify (id, body) {
+    // fix body ID
+    delete body.id
+    body.botServicesConfigId = id
+    const url = `${this.baseUrl}/config/organization/${this.params.orgId}/botconfig/${id}`
+    const options = {
+      method: 'PUT',
+      headers: {
+        Authorization: 'Bearer ' + this.params.accessToken
+      },
+      body
     }
+    return fetch(url, options)
   }
 }

@@ -1,21 +1,21 @@
 const fetch = require('../utils/fetch')
 
-module.exports = class SkillProfile {
+module.exports = class User {
   constructor (params) {
-    if (!params.orgId) throw Error('orgId is a required constructor parameter for webex-control-hub/contact-center/skill-profile.')
-    if (!params.accessToken) throw Error('accessToken is a required constructor parameter for webex-control-hub/contact-center/skill-profile.')
+    if (!params.orgId) throw Error('orgId is a required constructor parameter for webex-control-hub/contact-center/user.')
+    if (!params.accessToken) throw Error('accessToken is a required constructor parameter for webex-control-hub/contact-center/user.')
     this.params = params
     this.baseUrl = 'https://api.wxcc-us1.cisco.com'
   }
 
   /**
-   * Gets list of skill profiles
-   * @return {Promise} the fetch promise, which resolves to skill profiles JSON
+   * Gets list of users
+   * @return {Promise} the fetch promise, which resolves to users JSON
    * array when successful
    */
   async list (page = 0, pageSize = 100) {
     try {
-      const url = `${this.baseUrl}/organization/${this.params.orgId}/skill-profile`
+      const url = `${this.baseUrl}/organization/${this.params.orgId}/user`
       const options = {
         query: {
           page,
@@ -33,11 +33,11 @@ module.exports = class SkillProfile {
   }
 
   /**
-   * Find skill profile by name
-   * @return {Promise} the fetch promise, which resolves to skill profile JSON
+   * Find user by name
+   * @return {Promise} the fetch promise, which resolves to user JSON
    * object when successful or null if not found
    */
-  async find ({name}) {
+   async find ({id, email}) {
     try {
       let found = null
       let page = 0
@@ -47,9 +47,11 @@ module.exports = class SkillProfile {
       while (!found && !atEnd) {
         // keep looking
         let list = await this.list(page, pageSize)
-        console.log('found', list.length, 'skill profiles')
+        console.log('found', list.length, 'users')
         // look for item in the current list
-        found = list.find(item => item.name === name)
+        found = list.find(item => {
+          return (email && item.email === email) || (id && item.id === id)
+        })
         // did we reach the end of the total results?
         atEnd = list.length < pageSize
         // increment page for next iteration
@@ -63,12 +65,12 @@ module.exports = class SkillProfile {
   }
 
   /**
-   * Gets full data for one skill profile
-   * @return {Promise} the fetch promise, which resolves to skill profile JSON
+   * Gets full data for one user
+   * @return {Promise} the fetch promise, which resolves to user JSON
    * object when successful
    */
   get (id) {
-    const url = `${this.baseUrl}/organization/${this.params.orgId}/skill-profile/${id}`
+    const url = `${this.baseUrl}/organization/${this.params.orgId}/user/${id}`
     const options = {
       headers: {
         Authorization: 'Bearer ' + this.params.accessToken
@@ -78,20 +80,16 @@ module.exports = class SkillProfile {
   }
 
   /**
-   * Create a skill profile
-   * @return {Promise} the fetch promise, which resolves to skill profile JSON
+   * Create a user
+   * @return {Promise} the fetch promise, which resolves to user JSON
    * array when successful
    */
   create ({
     name,
-    skillId,
-    textValue = '',
-    description = '',
-    booleanValue = false,
-    proficiencyValue = 0
+    description = ''
   }) {
     try {
-      const url = `${this.baseUrl}/organization/${this.params.orgId}/skill-profile`
+      const url = `${this.baseUrl}/organization/${this.params.orgId}/user`
       const options = {
         method: 'POST',
         headers: {
@@ -101,13 +99,6 @@ module.exports = class SkillProfile {
           name,
           description,
           organizationId: this.params.orgId,
-          activeSkills: [{
-            textValue,
-            booleanValue,
-            skillId,
-            proficiencyValue,
-            organizationId: this.params.orgId
-          }]
         }
       }
       // console.log(url, options)
@@ -118,7 +109,7 @@ module.exports = class SkillProfile {
   }
 
   /**
-   * update a skill profile using same parameters as create
+   * update a user using same parameters as create
    * @return {Promise} the fetch promise, which resolves to fetch response body
    */
   async update ({
@@ -135,9 +126,9 @@ module.exports = class SkillProfile {
         existing = await this.find({name})
       }
       if (!existing) {
-        throw Error('cannot update skill profile - ', name, 'does not exist')
+        throw Error('cannot update user - ', name, 'does not exist')
       }
-      const url = `${this.baseUrl}/organization/${this.params.orgId}/skill-profile/${existing.id}`
+      const url = `${this.baseUrl}/organization/${this.params.orgId}/user/${existing.id}`
       if (name) existing.name = name
       if (description) existing.description = description
       const skill = existing.activeSkills[0]
@@ -159,11 +150,11 @@ module.exports = class SkillProfile {
   }
 
   /**
-   * replace a skill profile
+   * replace a user
    * @return {Promise} the fetch promise, which resolves to fetch response body
    */
   replace (body) {
-    const url = `${this.baseUrl}/organization/${this.params.orgId}/skill-profile/${body.id}`
+    const url = `${this.baseUrl}/organization/${this.params.orgId}/user/${body.id}`
     const options = {
       method: 'PUT',
       headers: {
@@ -175,11 +166,11 @@ module.exports = class SkillProfile {
   }
 
   /**
-   * patch a skill profile
+   * patch a user
    * @return {Promise} the fetch promise, which resolves to fetch response body
    */
   patch (body) {
-    const url = `${this.baseUrl}/organization/${this.params.orgId}/skill-profile/${body.id}`
+    const url = `${this.baseUrl}/organization/${this.params.orgId}/user/${body.id}`
     const options = {
       method: 'PATCH',
       headers: {
@@ -192,13 +183,13 @@ module.exports = class SkillProfile {
   }
 
   /**
-   * delete a skill profile
+   * delete a user
    * @return {Promise} the fetch promise, which resolves to fetch response body
    */
   // this does not work, it is disabled on API side with inaccessible foreign-
   // key constraint
   // remove (id) {
-  //   const url = `${this.baseUrl}/organization/${this.params.orgId}/skill-profile/${id}`
+  //   const url = `${this.baseUrl}/organization/${this.params.orgId}/user/${id}`
   //   const options = {
   //     method: 'DELETE',
   //     headers: {

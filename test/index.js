@@ -1,5 +1,6 @@
 require('dotenv').config()
 const lib = require('../src')
+const merge = require('merge')
 
 const client = new lib({
   orgId: process.env.ORG_ID,
@@ -63,43 +64,84 @@ const client = new lib({
 // client.contactCenter.ocis.fix('e8a93317-d79f-4b85-91af-0c908cd88980')
 // client.contactCenter.configGateway.listUsers()
 // client.contactCenter.skill.list()
-async function provision (id) {
-  const skillId = 'f52eb944-7ec4-4cdc-b208-22f242b1868e'
-  const name = 'Skill_' + id
-  // list all skill profiles
-  const skillProfiles = await client.contactCenter.skillProfile.list()
-  let skillProfile = skillProfiles.find(sp => sp.name === name)
-  // if skill profile doesn't exist
-  if (!skillProfile) {
+const globalSkillId = 'f52eb944-7ec4-4cdc-b208-22f242b1868e'
+const globalMultiMediaProfileId = 'f52eb944-7ec4-4cdc-b208-22f242b1868e'
+
+async function provision (type, body) {
+  // find skill profile
+  console.log('searching for', type, '...')
+  let skillProfile = await client.contactCenter[type].find(body)
+  // if skill profile exists
+  if (skillProfile) {
+    console.log(type, 'exists. updating it...')
+    // update it
+    skillProfile = await client.contactCenter[type].update(body, skillProfile)
+    // skillProfile = await client.contactCenter[type].patch(skillProfile)
+  } else {
+    console.log(type, 'does not exist. creating it...')
     // create it 
-    skillProfile = await client.contactCenter.skillProfile.create({
-      name,
-      skillId,
-      textValue: id,
-      description: 'coty test'
-    })
+    skillProfile = await client.contactCenter[type].create(body)
   }
+  // return it
   return skillProfile
 }
 
+async function main (id) {
+  // const users = await client.contactCenter.user.list()
+  // console.log(users)
+  const rick = await client.contactCenter.user.find({
+    email: `rbarrows${id}@cc.dc-01.com`
+  })
+  const sandra = await client.contactCenter.user.find({
+    email: `sjeffers${id}@cc.dc-01.com`
+  })
+  const userIds = [rick.id, sandra.id]
+  console.log('userIds', userIds)
+
+  // skill profile
+  const skillProfile = await provision('skillProfile', {
+    name: id,
+    skillId: globalSkillId,
+    textValue: id,
+    description: 'dCloud user ' + id
+  })
+
+  const teams = await client.contactCenter.team.list()
+  console.log(teams)
+
+  // team
+  // const team = await provision('team', {
+  //   name: id,
+  //   skillProfileId: skillProfile.id,
+  //   multiMediaProfileId: globalMultiMediaProfileId,
+  //   userIds
+  // })
+}
+
+// go
+main('0325')
+.then(r => console.log('done'))
+.catch(e => console.log(e.message))
+
+
+
 // client.contactCenter.skillProfile.get('a979ffc4-497b-463d-9416-875716c4a8aa')
 
-.then(sp => {
-  console.log('created', JSON.stringify(sp, null, 2))
-  client.contactCenter.skillProfile.replace(sp.id, {
-    ...sp,
-    name: 'Skill_9900',
-    activeSkills: [{
-      ...sp.activeSkills[0],
-      skillId: 'f52eb944-7ec4-4cdc-b208-22f242b1868e',
-      textValue: '9900'
-    }],
-    description: 'coty test'
-  })
-  .then(r => console.log('replaced', JSON.stringify(r, null, 2)))
-  .catch(e => console.log(e.message))
-})
-.catch(e => console.log(e.message))
+// .then(sp => {
+//   console.log('created', JSON.stringify(sp, null, 2))
+//   client.contactCenter.skillProfile.replace(sp.id, {
+//     ...sp,
+//     name: 'Skill_9900',
+//     activeSkills: [{
+//       ...sp.activeSkills[0],
+//       skillId: 'f52eb944-7ec4-4cdc-b208-22f242b1868e',
+//       textValue: '9900'
+//     }],
+//     description: 'coty test'
+//   })
+  
+// })
+// .catch(e => console.log(e.message))
 // client.contactCenter.team.list()
 
 // client.contactCenter.team.get('25c4b2a7-7952-4a52-b2fb-843c29e93575')

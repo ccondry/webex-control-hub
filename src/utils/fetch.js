@@ -41,6 +41,8 @@ module.exports = async function (url, options = {}) {
     if (options.query) {
       completeUrl = addUrlQueryParams(url, options.query)
     }
+    // console.log('fetch completeUrl', completeUrl)
+    // console.log('fetch options', options)
     const response = await fetch(completeUrl, options)
     const text = await response.text()
     if (response.ok) {

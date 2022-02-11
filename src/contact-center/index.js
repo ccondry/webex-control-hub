@@ -8,7 +8,7 @@ const ConfigGateway = require('./config-gateway')
 const Skill = require('./skill')
 const SkillProfile = require('./skill-profile')
 const Team = require('./team')
-// const User = require('./user')
+const User = require('./user')
 // const UserProfile = require('./user-profile')
 
 module.exports = class ContactCenter {
@@ -27,7 +27,7 @@ module.exports = class ContactCenter {
     this.skill = new Skill(this.params)
     this.skillProfile = new SkillProfile(this.params)
     this.team = new Team(this.params)
-    // this.user = new User(this.params)
+    this.user = new User(this.params)
     // this.userProfile = new UserProfile(this.params)
   }
 }

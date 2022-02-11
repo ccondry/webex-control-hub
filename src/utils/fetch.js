@@ -60,8 +60,12 @@ module.exports = async function (url, options = {}) {
         const json = JSON.parse(text)
         // message = json.message
         message = json.error_description || json.error || ''
+        if (typeof message === 'object') {
+          message = message.message[0].description
+        }
       } catch (e) {
         // continue
+        // console.log(e)
       }
       const error = Error(`${response.status} ${response.statusText} - ${message}`)
       error.status = response.status

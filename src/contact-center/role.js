@@ -2,8 +2,8 @@ const fetch = require('../utils/fetch')
 
 module.exports = class Role {
   constructor (params) {
-    if (!params.orgId) throw Error('orgId is a required constructor parameter for webex-control-hub/contact-center/treatment.')
-    if (!params.accessToken) throw Error('accessToken is a required constructor parameter for webex-control-hub/contact-center/treatment.')
+    if (!params.orgId) throw Error('orgId is a required constructor parameter for webex-control-hub/contact-center/role.')
+    if (!params.accessToken) throw Error('accessToken is a required constructor parameter for webex-control-hub/contact-center/role.')
     this.params = params
   }
 

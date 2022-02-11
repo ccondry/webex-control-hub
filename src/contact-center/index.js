@@ -4,6 +4,12 @@ const VirtualAssistant = require('./virtual-assistant')
 const Role = require('./role')
 const Ocis = require('./ocis')
 const ConfigGateway = require('./config-gateway')
+// const Queue = require('./queue')
+const Skill = require('./skill')
+const SkillProfile = require('./skill-profile')
+const Team = require('./team')
+// const User = require('./user')
+// const UserProfile = require('./user-profile')
 
 module.exports = class ContactCenter {
   constructor (params) {
@@ -17,5 +23,11 @@ module.exports = class ContactCenter {
     this.role = new Role(this.params)
     this.ocis = new Ocis(this.params)
     this.configGateway = new ConfigGateway(this.params)
+    // this.queue = new Queue(this.params)
+    this.skill = new Skill(this.params)
+    this.skillProfile = new SkillProfile(this.params)
+    this.team = new Team(this.params)
+    // this.user = new User(this.params)
+    // this.userProfile = new UserProfile(this.params)
   }
 }

@@ -2,8 +2,8 @@ const fetch = require('../utils/fetch')
 
 module.exports = class VirtualAssistant {
   constructor (params) {
-    if (!params.orgId) throw Error('orgId is a required constructor parameter for webex-control-hub/contact-center/treatment.')
-    if (!params.accessToken) throw Error('accessToken is a required constructor parameter for webex-control-hub/contact-center/treatment.')
+    if (!params.orgId) throw Error('orgId is a required constructor parameter for webex-control-hub/contact-center/virtual-assistant.')
+    if (!params.accessToken) throw Error('accessToken is a required constructor parameter for webex-control-hub/contact-center/virtual-assistant.')
     this.params = params
     this.baseUrl = 'https://virtual-assistant.produs1.ciscoccservice.com/virtual-assistant/v1'
   }

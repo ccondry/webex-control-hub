@@ -47,7 +47,7 @@ module.exports = class SkillProfile {
       while (!found && !atEnd) {
         // keep looking
         let list = await this.list(page, pageSize)
-        console.log('found', list.length, 'skill profiles')
+        // console.log('found', list.length, 'skill profiles')
         // look for item in the current list
         found = list.find(item => item.name === name)
         // did we reach the end of the total results?

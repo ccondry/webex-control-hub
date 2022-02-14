@@ -47,7 +47,7 @@ module.exports = class User {
       while (!found && !atEnd) {
         // keep looking
         let list = await this.list(page, pageSize)
-        console.log('found', list.length, 'users')
+        // console.log('found', list.length, 'users')
         // look for item in the current list
         found = list.find(item => {
           return (email && item.email === email) || (id && item.id === id)

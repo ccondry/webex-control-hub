@@ -5,17 +5,13 @@ const Org = require('./org')
 module.exports = class {
   constructor ({
     orgId,
-    accessToken,
-    siteName,
-    siteId
+    accessToken
   }) {
     if (!orgId) throw Error('orgId is a required constructor parameter for webex-control-hub.')
     if (!accessToken) throw Error('accessToken is a required constructor parameter for webex-control-hub.')
     this.params = {
       orgId,
-      accessToken,
-      siteName,
-      siteId
+      accessToken
     }
     this.contactCenter = new ContactCenter(this.params)
     this.user = new User(this.params)

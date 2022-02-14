@@ -28,6 +28,35 @@ module.exports = class Skill {
     }
   }
 
+  /**
+   * Find skill by name
+   * @return {Promise} the fetch promise, which resolves to skill JSON
+   * object when successful or null if not found
+   */
+     async find ({name}) {
+      try {
+        let found = null
+        let page = 0
+        let pageSize = 100
+        let atEnd = false
+        // while item is not found and last page of results has not been reached
+        while (!found && !atEnd) {
+          // keep looking
+          let list = await this.list(page, pageSize)
+          // look for item in the current list
+          found = list.find(item => item.name === name)
+          // did we reach the end of the total results?
+          atEnd = list.length < pageSize
+          // increment page for next iteration
+          page++
+        }
+        // return result
+        return found
+      } catch (e) {
+        throw e
+      }
+    }
+
   // /**
   //  * Gets full data for one virtual assistant
   //  * @return {Promise} the fetch promise, which resolves to virtual assistant JSON

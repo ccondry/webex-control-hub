@@ -10,6 +10,9 @@ const SkillProfile = require('./skill-profile')
 const Team = require('./team')
 const User = require('./user')
 // const UserProfile = require('./user-profile')
+const MultimediaProfile = require('./multimedia-profile')
+const Queue = require('./queue')
+const Site = require('./site')
 
 module.exports = class ContactCenter {
   constructor (params) {
@@ -29,5 +32,8 @@ module.exports = class ContactCenter {
     this.team = new Team(this.params)
     this.user = new User(this.params)
     // this.userProfile = new UserProfile(this.params)
+    this.multimediaProfile = new MultimediaProfile(this.params)
+    this.queue = new Queue(this.params)
+    this.site = new Site(this.params)
   }
 }

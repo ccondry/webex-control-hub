@@ -7,6 +7,38 @@ const client = new lib({
   accessToken: process.env.ACCESS_TOKEN
 })
 
+class Cache {
+  constructor (ttl = 60 * 60 * 1000) {
+    // ttl default 1 hour 
+    this.ttl = ttl
+    // the data store
+    this.store = {}
+  }
+
+  get (key) {
+    const item = this.store[key]
+    if (item) {
+      const isStale = item.exp <= new Date().getTime()
+      if (isStale) {
+        // delete stale data
+        delete this.store[key]
+      } else {
+        return item.data
+      }
+    }
+    // not found or is stale
+    return null
+  }
+
+  set (key, data, ttl) {
+    const now = new Date().getTime()
+    this.store[key] = {
+      exp: now + (ttl || this.ttl),
+      data
+    }
+  }
+}
+
 // client.contactCenter.chatTemplate.list()
 // client.user.list({count: 100, startIndex: 0})
 // client.user.listAll()
@@ -112,7 +144,8 @@ async function provision (type, body) {
     console.log(type, 'exists. updating it...')
     // update it
     try {
-      item = await client.contactCenter[type].update(body, item)
+      // console.log(body)
+      item = await client.contactCenter[type].update(body)
     } catch (e) {
       console.log('failed to update', type, e.message)
     }
@@ -127,39 +160,6 @@ async function provision (type, body) {
 }
 
 async function main (id) {
-
-  // const globalSkillId = 'f52eb944-7ec4-4cdc-b208-22f242b1868e'
-  // const globalMultiMediaProfileId = '9fc6ac55-6720-4116-8aaa-a026dafed010'
-  
-  // const t = await client.contactCenter.team.get('05fa34d0-a5f4-429a-acab-f4f2bfefb8a8')
-  // console.log(t)
-  class Cache {
-    constructor (ttl = 60 * 60 * 1000) {
-      // ttl default 1 hour 
-      this.ttl = ttl
-      // the data store
-      this.store = {}
-    }
-
-    get (key) {
-      const item = this.store[key]
-      const isStale = item.exp <= new Date().getTime()
-      if (item && !isStale) {
-        return item.data
-      } else {
-        return null
-      }
-    }
-
-    set (key, data, ttl) {
-      const now = new Date().getTime()
-      this.store[key] = {
-        exp: now + (ttl || this.ttl),
-        data
-      }
-    }
-  }
-
   const cache = new Cache()
 
   async function getCacheList (type, ttl) {
@@ -219,12 +219,14 @@ async function main (id) {
   
   // get voice queue
   const voiceQueue = await getCache('queue', voiceQueueName)
+  // console.log('voiceQueue', voiceQueue)
   if (!voiceQueue) {
     throw Error(`Global voice queue ${voiceQueueName} was not found. Cannot continue provisioning user ${id}`)
   }
-
+  
   // get chat queue
   const chatQueue = await getCache('queue', chatQueueName)
+  // console.log('chatQueue', chatQueue)
   if (!chatQueue) {
     throw Error(`Global chat queue ${chatQueueName} was not found. Cannot continue provisioning user ${id}`)
   }
@@ -271,13 +273,20 @@ async function main (id) {
 
   // add user team to queues
   const voiceAdded = addToQueue(voiceQueue, team)
-  // if (voiceAdded) {
-  //   const body = voiceQueue
-  //   voiceQueue.ivrRequeueUrl = ''
-  //   await client.contactCenter.queue.replace(body)
-  // }
+  if (voiceAdded) {
+    console.log('adding team', team.name, 'to queue', voiceQueue.name, '...')
+    await client.contactCenter.queue.update(voiceQueue)
+  }
   const chatAdded = addToQueue(chatQueue, team)
+  if (chatAdded) {
+    console.log('adding team', team.name, 'to queue', chatQueue.name, '...')
+    await client.contactCenter.queue.update(chatQueue)
+  }
   const emailAdded = addToQueue(emailQueue, team)
+  if (emailAdded) {
+    console.log('adding team', team.name, 'to queue', emailQueue.name, '...')
+    await client.contactCenter.queue.update(emailQueue)
+  }
 
   // done?
 }
@@ -295,7 +304,9 @@ function addToQueue (queue, team) {
     // make sure call dist groups has at least the default group
     queue.callDistributionGroups = queue.callDistributionGroups || []
     queue.callDistributionGroups[0] = queue.callDistributionGroups[0] || {
-      agentGroups: [], order: 1, duration: 0
+      agentGroups: [],
+      order: 1,
+      duration: 0
     }
     // add team to the queue
     queue.callDistributionGroups[0].agentGroups.push({teamId: team.id})

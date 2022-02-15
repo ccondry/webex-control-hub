@@ -5,7 +5,7 @@ module.exports = class SkillProfile {
     if (!params.orgId) throw Error('orgId is a required constructor parameter for webex-control-hub/contact-center/skill-profile.')
     if (!params.accessToken) throw Error('accessToken is a required constructor parameter for webex-control-hub/contact-center/skill-profile.')
     this.params = params
-    this.baseUrl = 'https://api.wxcc-us1.cisco.com'
+    this.baseUrl = `https://api.wxcc-us1.cisco.com/organization/${this.params.orgId}/skill-profile`
   }
 
   /**
@@ -15,7 +15,7 @@ module.exports = class SkillProfile {
    */
   async list (page = 0, pageSize = 100) {
     try {
-      const url = `${this.baseUrl}/organization/${this.params.orgId}/skill-profile`
+      const url = this.baseUrl
       const options = {
         query: {
           page,
@@ -27,6 +27,35 @@ module.exports = class SkillProfile {
       }
       const response = await fetch(url, options)
       return response
+    } catch (e) {
+      throw e
+    }
+  }
+
+  /**
+  * Gets full list of skill profiles
+  * @return {Promise} the fetch promise, which resolves to skill profiles JSON array when
+  * successful
+  */
+    async listAll () {
+    try {
+      let page = 0
+      let pageSize = 100
+      let atEnd = false
+      const data = []
+      // while item is not found and last page of results has not been reached
+      while (!atEnd) {
+        // keep looking
+        const list = await this.list(page, pageSize)
+        // add results to return data array
+        data.push.apply(data, list)
+        // did we reach the end of the total results?
+        atEnd = list.length < pageSize
+        // increment page for next iteration
+        page++
+      }
+      // return results
+      return data
     } catch (e) {
       throw e
     }
@@ -68,7 +97,7 @@ module.exports = class SkillProfile {
    * object when successful
    */
   get (id) {
-    const url = `${this.baseUrl}/organization/${this.params.orgId}/skill-profile/${id}`
+    const url = `${this.baseUrl}/${id}`
     const options = {
       headers: {
         Authorization: 'Bearer ' + this.params.accessToken
@@ -82,76 +111,17 @@ module.exports = class SkillProfile {
    * @return {Promise} the fetch promise, which resolves to skill profile JSON
    * array when successful
    */
-  create ({
-    name,
-    skillId,
-    textValue = '',
-    description = '',
-    booleanValue = false,
-    proficiencyValue = 0
-  }) {
+  create (body) {
     try {
-      const url = `${this.baseUrl}/organization/${this.params.orgId}/skill-profile`
+      const url = this.baseUrl
       const options = {
         method: 'POST',
         headers: {
           Authorization: 'Bearer ' + this.params.accessToken
         },
-        body: {
-          name,
-          description,
-          organizationId: this.params.orgId,
-          activeSkills: [{
-            textValue,
-            booleanValue,
-            skillId,
-            proficiencyValue,
-            organizationId: this.params.orgId
-          }]
-        }
+        body
       }
       // console.log(url, options)
-      return fetch(url, options)
-    } catch (e) {
-      throw e
-    }
-  }
-
-  /**
-   * update a skill profile using same parameters as create
-   * @return {Promise} the fetch promise, which resolves to fetch response body
-   */
-  async update ({
-    name,
-    skillId,
-    textValue,
-    description,
-    booleanValue,
-    proficiencyValue
-  }, existing) {
-    try {
-      // find existing record if not provided
-      if (!existing) {
-        existing = await this.find({name})
-      }
-      if (!existing) {
-        throw Error('cannot update skill profile - ', name, 'does not exist')
-      }
-      const url = `${this.baseUrl}/organization/${this.params.orgId}/skill-profile/${existing.id}`
-      if (name) existing.name = name
-      if (description) existing.description = description
-      const skill = existing.activeSkills[0]
-      if (skillId) skill.skillId = skillId
-      if (textValue) skill.textValue = textValue
-      if (booleanValue) skill.booleanValue = booleanValue
-      if (proficiencyValue) skill.proficiencyValue = proficiencyValue
-      const options = {
-        method: 'PUT',
-        headers: {
-          Authorization: 'Bearer ' + this.params.accessToken
-        },
-        body: existing
-      }
       return fetch(url, options)
     } catch (e) {
       throw e
@@ -162,29 +132,17 @@ module.exports = class SkillProfile {
    * replace a skill profile
    * @return {Promise} the fetch promise, which resolves to fetch response body
    */
-  replace (body) {
-    const url = `${this.baseUrl}/organization/${this.params.orgId}/skill-profile/${body.id}`
+  update (body) {
+    const url = `${this.baseUrl}/${body.id}`
+    // fix missing body parameters
+    if (typeof body.version === 'undefined') {
+      body.version = 1
+    }
+    body.organizationId = this.params.orgId
     const options = {
       method: 'PUT',
       headers: {
         Authorization: 'Bearer ' + this.params.accessToken
-      },
-      body
-    }
-    return fetch(url, options)
-  }
-
-  /**
-   * patch a skill profile
-   * @return {Promise} the fetch promise, which resolves to fetch response body
-   */
-  patch (body) {
-    const url = `${this.baseUrl}/organization/${this.params.orgId}/skill-profile/${body.id}`
-    const options = {
-      method: 'PATCH',
-      headers: {
-        Authorization: 'Bearer ' + this.params.accessToken,
-        'Content-Type': 'application/merge-patch+json'
       },
       body
     }

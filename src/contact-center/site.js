@@ -77,7 +77,7 @@ module.exports = class Site {
    * @return {Promise} the fetch promise, which resolves to site JSON
    * array when successful
    */
-    async listAll () {
+  async listAll () {
     try {
       let page = 0
       let pageSize = 100

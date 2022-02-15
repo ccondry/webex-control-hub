@@ -33,6 +33,35 @@ module.exports = class User {
   }
 
   /**
+  * Gets full list of skill profiles
+  * @return {Promise} the fetch promise, which resolves to skill profiles JSON array when
+  * successful
+  */
+  async listAll () {
+    try {
+      let page = 0
+      let pageSize = 100
+      let atEnd = false
+      const data = []
+      // while item is not found and last page of results has not been reached
+      while (!atEnd) {
+        // keep looking
+        const list = await this.list(page, pageSize)
+        // add results to return data array
+        data.push.apply(data, list)
+        // did we reach the end of the total results?
+        atEnd = list.length < pageSize
+        // increment page for next iteration
+        page++
+      }
+      // return results
+      return data
+    } catch (e) {
+      throw e
+    }
+  }
+
+  /**
    * Find user by name
    * @return {Promise} the fetch promise, which resolves to user JSON
    * object when successful or null if not found

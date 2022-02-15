@@ -1,16 +1,17 @@
 const fetch = require('../utils/fetch')
 
-module.exports = class MultimediaProfile {
+module.exports = class Queue {
   constructor (params) {
     if (!params.orgId) throw Error('orgId is a required constructor parameter for webex-control-hub/contact-center/queue.')
     if (!params.accessToken) throw Error('accessToken is a required constructor parameter for webex-control-hub/contact-center/queue.')
     this.params = params
-    this.baseUrl = `https://api.wxcc-us1.cisco.com/organization/${this.params.orgId}/contact-service-queue`
+    // this.baseUrl = `https://api.wxcc-us1.cisco.com/organization/${this.params.orgId}/contact-service-queue`
+    this.baseUrl = `https://config-service.produs1.ciscoccservice.com/cms/api/organization/${this.params.orgId}/contact-service-queue`
   }
 
   /**
-   * Gets list of multimedia profiles
-   * @return {Promise} the fetch promise, which resolves to multimedia profiles JSON
+   * Gets list of queues
+   * @return {Promise} the fetch promise, which resolves to queues JSON
    * array when successful
    */
   async list (page = 0, pageSize = 100) {
@@ -33,8 +34,8 @@ module.exports = class MultimediaProfile {
   }
 
   /**
-   * Find multimedia profile by name
-   * @return {Promise} the fetch promise, which resolves to multimedia profile JSON
+   * Find queue by name
+   * @return {Promise} the fetch promise, which resolves to queue JSON
    * object when successful or null if not found
    */
   async find ({name}) {
@@ -47,7 +48,7 @@ module.exports = class MultimediaProfile {
       while (!found && !atEnd) {
         // keep looking
         let list = await this.list(page, pageSize)
-        // console.log('found', list.length, 'multimedia profiles')
+        // console.log('found', list.length, 'queues')
         // look for item in the current list
         found = list.find(item => item.name === name)
         // did we reach the end of the total results?
@@ -63,8 +64,37 @@ module.exports = class MultimediaProfile {
   }
 
   /**
-   * Gets full data for one multimedia profile
-   * @return {Promise} the fetch promise, which resolves to multimedia profile JSON
+  * Gets full list of queues
+  * @return {Promise} the fetch promise, which resolves to queues JSON array when
+  * successful
+  */
+  async listAll () {
+    try {
+      let page = 0
+      let pageSize = 100
+      let atEnd = false
+      const data = []
+      // while item is not found and last page of results has not been reached
+      while (!atEnd) {
+        // keep looking
+        const list = await this.list(page, pageSize)
+        // add results to return data array
+        data.push.apply(data, list)
+        // did we reach the end of the total results?
+        atEnd = list.length < pageSize
+        // increment page for next iteration
+        page++
+      }
+      // return results
+      return data
+    } catch (e) {
+      throw e
+    }
+  }
+
+  /**
+   * Gets full data for one queue
+   * @return {Promise} the fetch promise, which resolves to queue JSON
    * object when successful
    */
   get (id) {
@@ -77,93 +107,23 @@ module.exports = class MultimediaProfile {
     return fetch(url, options)
   }
 
-  // /**
-  //  * Create a multimedia profile
-  //  * @return {Promise} the fetch promise, which resolves to multimedia profile JSON
-  //  * array when successful
-  //  */
-  // create ({
-  //   name,
-  //   multimediaId,
-  //   textValue = '',
-  //   description = '',
-  //   booleanValue = false,
-  //   proficiencyValue = 0
-  // }) {
-  //   try {
-  //     const url = this.baseUrl
-  //     const options = {
-  //       method: 'POST',
-  //       headers: {
-  //         Authorization: 'Bearer ' + this.params.accessToken
-  //       },
-  //       body: {
-  //         name,
-  //         description,
-  //         organizationId: this.params.orgId,
-  //         activeMultimedias: [{
-  //           textValue,
-  //           booleanValue,
-  //           multimediaId,
-  //           proficiencyValue,
-  //           organizationId: this.params.orgId
-  //         }]
-  //       }
-  //     }
-  //     // console.log(url, options)
-  //     return fetch(url, options)
-  //   } catch (e) {
-  //     throw e
-  //   }
-  // }
-
-  // /**
-  //  * update a multimedia profile using same parameters as create
-  //  * @return {Promise} the fetch promise, which resolves to fetch response body
-  //  */
-  // async update ({
-  //   name,
-  //   multimediaId,
-  //   textValue,
-  //   description,
-  //   booleanValue,
-  //   proficiencyValue
-  // }, existing) {
-  //   try {
-  //     // find existing record if not provided
-  //     if (!existing) {
-  //       existing = await this.find({name})
-  //     }
-  //     if (!existing) {
-  //       throw Error('cannot update multimedia profile - ', name, 'does not exist')
-  //     }
-  //     const url = `${this.baseUrl}/organization/${this.params.orgId}/contact-service-queue/${existing.id}`
-  //     if (name) existing.name = name
-  //     if (description) existing.description = description
-  //     const multimedia = existing.activeMultimedias[0]
-  //     if (multimediaId) multimedia.multimediaId = multimediaId
-  //     if (textValue) multimedia.textValue = textValue
-  //     if (booleanValue) multimedia.booleanValue = booleanValue
-  //     if (proficiencyValue) multimedia.proficiencyValue = proficiencyValue
-  //     const options = {
-  //       method: 'PUT',
-  //       headers: {
-  //         Authorization: 'Bearer ' + this.params.accessToken
-  //       },
-  //       body: existing
-  //     }
-  //     return fetch(url, options)
-  //   } catch (e) {
-  //     throw e
-  //   }
-  // }
-
   /**
-   * replace a multimedia profile
+   * update a queue
    * @return {Promise} the fetch promise, which resolves to fetch response body
    */
-  replace (body) {
+   update (body) {
     const url = `${this.baseUrl}/${body.id}`
+    // fix missing body parameters. I think these are deprecated but required
+    // for API validation?
+    if (typeof body.checkAgentAvailability === 'undefined') {
+      body.checkAgentAvailability = false
+    }
+    // if (typeof body.ivrRequeueUrl === 'undefined') {
+    //   body.ivrRequeueUrl = 'https://www.webex.com'
+    // }
+    // if (typeof body.controlFlowScriptUrl === 'undefined') {
+    //   body.controlFlowScriptUrl = 'https://flow-control.produs1.ciscoccservice.com/31f1c57f-4fa1-417b-b5c5-6feb6abea062/royal-enfield'
+    // }
     const options = {
       method: 'PUT',
       headers: {
@@ -175,7 +135,7 @@ module.exports = class MultimediaProfile {
   }
 
   /**
-   * patch a multimedia profile
+   * patch a queue
    * @return {Promise} the fetch promise, which resolves to fetch response body
    */
   patch (body) {
@@ -192,7 +152,7 @@ module.exports = class MultimediaProfile {
   }
 
   /**
-   * delete a multimedia profile
+   * delete a queue
    * @return {Promise} the fetch promise, which resolves to fetch response body
    */
   // this does not work, it is disabled on API side with inaccessible foreign-

@@ -4,7 +4,9 @@
   "description": "Node.js client for interacting with Cisco Webex Control Hub (admin.webex.com) REST APIs",
   "main": "src/index.js",
   "scripts": {
-    "test": "node test"
+    "test": "node test",
+    "test:queue": "mocha test/queue --timeout 20000",
+    "test:skill-profile": "mocha test/skill-profile --timeout 20000"
   },
   "repository": "https://github.com/ccondry/webex-control-hub.git",
   "author": "Coty Condry <ccondry@cisco.com>",

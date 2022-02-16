@@ -140,30 +140,30 @@ class Cache {
 // .then(r => console.log(JSON.stringify(r, null, 2)))
 // .catch(e => console.log(e.message))
 
-async function provision (type, body) {
-  // find skill profile
-  console.log('searching for', type, '...')
-  let item = await client.contactCenter[type].find(body)
-  // if skill profile exists
-  if (item) {
-    console.log(type, 'exists. updating it...')
-    console.log(item)
-    // update it
-    try {
-      // console.log(body)
-      item = await client.contactCenter[type].update(body)
-    } catch (e) {
-      console.log('failed to update', type, e.message)
-    }
-    // item = await client.contactCenter[type].patch(item)
-  } else {
-    console.log(type, 'does not exist. creating it...')
-    // create it 
-    item = await client.contactCenter[type].create(body)
-  }
-  // return it
-  return item
-}
+// async function provision (type, body) {
+//   // find skill profile
+//   console.log('searching for', type, '...')
+//   let item = await client.contactCenter[type].find(body)
+//   // if skill profile exists
+//   if (item) {
+//     console.log(type, 'exists. updating it...')
+//     console.log(item)
+//     // update it
+//     try {
+//       // console.log(body)
+//       item = await client.contactCenter[type].update(body)
+//     } catch (e) {
+//       console.log('failed to update', type, e.message)
+//     }
+//     // item = await client.contactCenter[type].patch(item)
+//   } else {
+//     console.log(type, 'does not exist. creating it...')
+//     // create it 
+//     item = await client.contactCenter[type].create(body)
+//   }
+//   // return it
+//   return item
+// }
 
 async function main (id) {
   const cache = new Cache()
@@ -265,12 +265,12 @@ async function main (id) {
   }
 
   // find skill profile
-  console.log('searching for skill profile...')
+  console.log('searching for skill profile', id, '...')
   let skillProfile = await client.contactCenter.skillProfile.find({name: id})
 
   // if skill profile exists
   if (skillProfile) {
-    console.log('skill profile exists. updating it...')
+    console.log('skill profile', id, 'exists. updating it...')
     // console.log(skillProfile)
     // update it
     try {
@@ -288,12 +288,12 @@ async function main (id) {
 
       skillProfile = await client.contactCenter.skillProfile.update(body)
     } catch (e) {
-      console.log('failed to update skill profile:', e.message)
+      console.log('failed to update skill profile', id, ':', e.message)
     }
     // item = await client.contactCenter[type].patch(skillProfile)
   } else {
     // create it 
-    console.log('skill profile does not exist. creating it...')
+    console.log('skill profile', id, 'does not exist. creating it...')
     // get template
     const template = await client.contactCenter.skillProfile.find({
       name: skillProfileTemplateName
@@ -321,12 +321,12 @@ async function main (id) {
 
   // team
   // find team
-  console.log('searching for team...')
+  console.log('searching for team', id, '...')
   let team = await client.contactCenter.team.find({name: id})
 
   // if team exists
   if (team) {
-    console.log('team exists. updating it...')
+    console.log('team', id, 'exists. updating it...')
     // console.log(team)
     // update it
     try {
@@ -353,12 +353,12 @@ async function main (id) {
 
       team = await client.contactCenter.team.update(body)
     } catch (e) {
-      console.log('failed to update team:', e.message)
+      console.log('failed to update team', id, ':', e.message)
     }
     // item = await client.contactCenter[type].patch(team)
   } else {
     // create it 
-    console.log('team does not exist. creating it...')
+    console.log('team', id, 'does not exist. creating it...')
     // get template
     const template = await client.contactCenter.team.find({
       name: teamTemplateName

@@ -7,37 +7,37 @@ const client = new lib({
   accessToken: process.env.ACCESS_TOKEN
 })
 
-class Cache {
-  constructor (ttl = 60 * 60 * 1000) {
-    // ttl default 1 hour 
-    this.ttl = ttl
-    // the data store
-    this.store = {}
-  }
+// class Cache {
+//   constructor (ttl = 60 * 60 * 1000) {
+//     // ttl default 1 hour 
+//     this.ttl = ttl
+//     // the data store
+//     this.store = {}
+//   }
 
-  get (key) {
-    const item = this.store[key]
-    if (item) {
-      const isStale = item.exp <= new Date().getTime()
-      if (isStale) {
-        // delete stale data
-        delete this.store[key]
-      } else {
-        return item.data
-      }
-    }
-    // not found or is stale
-    return null
-  }
+//   get (key) {
+//     const item = this.store[key]
+//     if (item) {
+//       const isStale = item.exp <= new Date().getTime()
+//       if (isStale) {
+//         // delete stale data
+//         delete this.store[key]
+//       } else {
+//         return item.data
+//       }
+//     }
+//     // not found or is stale
+//     return null
+//   }
 
-  set (key, data, ttl) {
-    const now = new Date().getTime()
-    this.store[key] = {
-      exp: now + (ttl || this.ttl),
-      data
-    }
-  }
-}
+//   set (key, data, ttl) {
+//     const now = new Date().getTime()
+//     this.store[key] = {
+//       exp: now + (ttl || this.ttl),
+//       data
+//     }
+//   }
+// }
 
 // client.contactCenter.chatTemplate.list()
 // client.user.list({count: 100, startIndex: 0})
@@ -166,36 +166,36 @@ class Cache {
 // }
 
 async function main (id) {
-  const cache = new Cache()
+  // const cache = new Cache()
 
-  async function getCacheList (type, ttl) {
-    // get from cache
-    let items = cache.get(type)
-    // if no cache
-    if (!items) {
-      // get from API
-      items = await client.contactCenter[type].listAll()
-      // store in cache
-      cache.set(type, items, ttl)
-    }
-    // return data
-    return items
-  }
+  // async function getCacheList (type, ttl) {
+  //   // get from cache
+  //   let items = cache.get(type)
+  //   // if no cache
+  //   if (!items) {
+  //     // get from API
+  //     items = await client.contactCenter[type].listAll()
+  //     // store in cache
+  //     cache.set(type, items, ttl)
+  //   }
+  //   // return data
+  //   return items
+  // }
 
-  async function getCache (type, name, ttl) {
-    const key = type + '.' + name
-    // get from cache
-    let item = cache.get(key)
-    // if no cache
-    if (!item) {
-      // get from API
-      item = await client.contactCenter[type].find({name})
-      // store in cache
-      cache.set(key, item, ttl)
-    }
-    // return data
-    return item
-  }
+  // async function getCache (type, name, ttl) {
+  //   const key = type + '.' + name
+  //   // get from cache
+  //   let item = cache.get(key)
+  //   // if no cache
+  //   if (!item) {
+  //     // get from API
+  //     item = await client.contactCenter[type].find({name})
+  //     // store in cache
+  //     cache.set(key, item, ttl)
+  //   }
+  //   // return data
+  //   return item
+  // }
 
   // static strings
   const skillName = 'dCloud_Default_Skill'
@@ -208,48 +208,46 @@ async function main (id) {
   const teamTemplateName = 'Team_Provision_Template'
 
   // get contact center site
-  const site = await getCache('site', siteName)
+  const site = await client.contactCenter.site.find({name: siteName})
   if (!site) {
     throw Error(`Global site ${siteName} was not found. Cannot continue provisioning user ${id}`)
   }
   
   // get skill
-  const skill = await getCache('skill', skillName)
+  const skill = await client.contactCenter.skill.find({name: skillName})
   if (!skill) {
     throw Error(`Global skill ${skillName} was not found. Cannot continue provisioning user ${id}`)
   }
   
   // get multimedia profile
-  const multimediaProfile = await getCache('multimediaProfile', multimediaProfileName)
+  const multimediaProfile = await client.contactCenter.multimediaProfile.find({name: multimediaProfileName})
   if (!multimediaProfile) {
     throw Error(`Global multimedia profile ${multimediaProfileName} was not found. Cannot continue provisioning user ${id}`)
   }
   
   // get voice queue
-  const voiceQueue = await getCache('queue', voiceQueueName)
-  // console.log('voiceQueue', voiceQueue)
+  const voiceQueue = await client.contactCenter.queue.find({name: voiceQueueName})
   if (!voiceQueue) {
     throw Error(`Global voice queue ${voiceQueueName} was not found. Cannot continue provisioning user ${id}`)
   }
   
   // get chat queue
-  const chatQueue = await getCache('queue', chatQueueName)
-  // console.log('chatQueue', chatQueue)
+  const chatQueue = await client.contactCenter.queue.find({name: chatQueueName})
   if (!chatQueue) {
     throw Error(`Global chat queue ${chatQueueName} was not found. Cannot continue provisioning user ${id}`)
   }
 
   // get email queue
-  const emailQueue = await getCache('queue', emailQueueName)
+  const emailQueue = await client.contactCenter.queue.find({name: emailQueueName})
   if (!emailQueue) {
     throw Error(`Global email queue ${emailQueueName} was not found. Cannot continue provisioning user ${id}`)
   }
 
   // get users list
-  const users = await getCacheList('user')
+  const users = await client.contactCenter.user.listAll()
 
   // get teams list
-  const teams = await getCacheList('team')
+  const teams = await await client.contactCenter.team.listAll()
 
   // find rick
   const rickEmail = `rbarrows${id}@cc.dc-01.com`

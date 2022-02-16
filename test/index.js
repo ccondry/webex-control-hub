@@ -102,6 +102,9 @@ class Cache {
 
 
 // client.contactCenter.skillProfile.get('a979ffc4-497b-463d-9416-875716c4a8aa')
+// client.contactCenter.skillProfile.list()
+// .then(r => console.log(r))
+// .catch(e => console.log(e.message))
 
 // .then(sp => {
 //   console.log('created', JSON.stringify(sp, null, 2))
@@ -119,6 +122,8 @@ class Cache {
 // })
 // .catch(e => console.log(e.message))
 // client.contactCenter.team.list()
+// .then(r => console.log(r))
+// .catch(e => console.log(e.message))
 
 // client.contactCenter.team.get('25c4b2a7-7952-4a52-b2fb-843c29e93575')
 // .then(r => {
@@ -142,6 +147,7 @@ async function provision (type, body) {
   // if skill profile exists
   if (item) {
     console.log(type, 'exists. updating it...')
+    console.log(item)
     // update it
     try {
       // console.log(body)
@@ -198,6 +204,8 @@ async function main (id) {
   const chatQueueName = 'Q_Chat_dCloud'
   const emailQueueName = 'IMI_Queue_Email'
   const siteName = 'dCloud_Site'
+  const skillProfileTemplateName = 'Skill_Profile_Provision_Template'
+  const teamTemplateName = 'Team_Provision_Template'
 
   // get contact center site
   const site = await getCache('site', siteName)
@@ -240,6 +248,9 @@ async function main (id) {
   // get users list
   const users = await getCacheList('user')
 
+  // get teams list
+  const teams = await getCacheList('team')
+
   // find rick
   const rickEmail = `rbarrows${id}@cc.dc-01.com`
   const rick = users.find(user => user.email === rickEmail)
@@ -253,67 +264,149 @@ async function main (id) {
     throw Error(`User ${sandraEmail} was not found. Cannot continue provisioning user ${id}`)
   }
 
-  // skill profile
-  const skillProfile = await provision('skillProfile', {
-    name: id,
-    skillId: skill.id,
-    textValue: id,
-    description: `dCloud user ${id}`
-  })
+  // find skill profile
+  console.log('searching for skill profile...')
+  let skillProfile = await client.contactCenter.skillProfile.find({name: id})
+
+  // if skill profile exists
+  if (skillProfile) {
+    console.log('skill profile exists. updating it...')
+    // console.log(skillProfile)
+    // update it
+    try {
+      const body = {
+        ...skillProfile,
+        name: id,
+        description: `dCloud user ${id}`
+      }
+      body.activeSkills[0] = {
+        ...body.activeSkills[0],
+        textValue: id,
+        booleanValue: false,
+        proficiencyValue: 0
+      }
+
+      skillProfile = await client.contactCenter.skillProfile.update(body)
+    } catch (e) {
+      console.log('failed to update skill profile:', e.message)
+    }
+    // item = await client.contactCenter[type].patch(skillProfile)
+  } else {
+    // create it 
+    console.log('skill profile does not exist. creating it...')
+    // get template
+    const template = await client.contactCenter.skillProfile.find({
+      name: skillProfileTemplateName
+    })
+    // clean template data
+    delete template.version
+    delete template.id
+    delete template.links
+    delete template.activeSkills[0].id
+    delete template.activeSkills[0].links
+    
+    const body = {
+      ...template,
+      name: id,
+      description: `dCloud user ${id}`
+    }
+    body.activeSkills[0] = {
+      ...template.activeSkills[0],
+      textValue: id,
+      booleanValue: false,
+      proficiencyValue: 0
+    }
+    skillProfile = await client.contactCenterskillProfile.create(body)
+  }
 
   // team
-  const team = await provision('team', {
-    name: id,
-    skillProfileId: skillProfile.id,
-    multiMediaProfileId: multimediaProfile.id,
-    userIds: [rick.id, sandra.id],
-    siteName: site.name,
-    siteId: site.id
-  })
+  // find team
+  console.log('searching for team...')
+  let team = await client.contactCenter.team.find({name: id})
+
+  // if team exists
+  if (team) {
+    console.log('team exists. updating it...')
+    // console.log(team)
+    // update it
+    try {
+      // const team = await provision('team', {
+      //   name: id,
+      //   skillProfileId: skillProfile.id,
+      //   multiMediaProfileId: multimediaProfile.id,
+      //   userIds: [rick.id, sandra.id],
+      //   siteName: site.name,
+      //   siteId: site.id
+      // })
+    
+      const body = {
+        ...team,
+        name: id,
+        description: `dCloud user ${id}`,
+        active: true,
+        skillProfileId: skillProfile.id,
+        multiMediaProfileId: multimediaProfile.id,
+        userIds: [rick.id, sandra.id],
+        siteName: site.name,
+        siteId: site.id
+      }
+
+      team = await client.contactCenter.team.update(body)
+    } catch (e) {
+      console.log('failed to update team:', e.message)
+    }
+    // item = await client.contactCenter[type].patch(team)
+  } else {
+    // create it 
+    console.log('team does not exist. creating it...')
+    // get template
+    const template = await client.contactCenter.team.find({
+      name: teamTemplateName
+    })
+    // clean template data
+    delete template.version
+    delete template.id
+    delete template.links
+    delete template.activeSkills[0].id
+    delete template.activeSkills[0].links
+    
+    const body = {
+      ...template,
+      name: id,
+      description: `dCloud user ${id}`,
+      active: true,
+      skillProfileId: skillProfile.id,
+      multiMediaProfileId: multimediaProfile.id,
+      userIds: [rick.id, sandra.id],
+      siteName: site.name,
+      siteId: site.id
+    }
+    team = await client.contactCenterteam.create(body)
+  }
 
   // add user team to queues
-  const voiceAdded = addToQueue(voiceQueue, team)
-  if (voiceAdded) {
-    console.log('adding team', team.name, 'to queue', voiceQueue.name, '...')
-    await client.contactCenter.queue.update(voiceQueue)
-  }
-  const chatAdded = addToQueue(chatQueue, team)
-  if (chatAdded) {
-    console.log('adding team', team.name, 'to queue', chatQueue.name, '...')
-    await client.contactCenter.queue.update(chatQueue)
-  }
-  const emailAdded = addToQueue(emailQueue, team)
-  if (emailAdded) {
-    console.log('adding team', team.name, 'to queue', emailQueue.name, '...')
-    await client.contactCenter.queue.update(emailQueue)
-  }
+  updateQueue(voiceQueue, teams)
+  console.log('updating queue', voiceQueue.name, 'with all teams...')
+  await client.contactCenter.queue.update(voiceQueue)
+
+  updateQueue(chatQueue, teams)
+  console.log('updating queue', chatQueue.name, 'with all teams...')
+  await client.contactCenter.queue.update(chatQueue)
+
+  updateQueue(emailQueue, teams)
+  console.log('updating queue', emailQueue.name, 'with all teams...')
+  await client.contactCenter.queue.update(emailQueue)
 
   // done?
 }
 
-// add a team to a queue's call distribution groups
-function addToQueue (queue, team) {
-  // is this team already in this queue?
-  let existing
-  try {
-    existing = queue.callDistributionGroups.agentGroups.find(t => t.teamId === team.id)
-  } catch (e) {
-    // continue
-  }
-  if (!existing) {
-    // make sure call dist groups has at least the default group
-    queue.callDistributionGroups = queue.callDistributionGroups || []
-    queue.callDistributionGroups[0] = queue.callDistributionGroups[0] || {
-      agentGroups: [],
-      order: 1,
-      duration: 0
-    }
-    // add team to the queue
-    queue.callDistributionGroups[0].agentGroups.push({teamId: team.id})
-    return true
-  }
-  // did not update
-  return false
+// set all teams to a queue's call distribution groups
+function updateQueue (queue, teams) {
+  queue.callDistributionGroups = [{
+    agentGroups: teams.map(team => ({teamId: team.id})),
+    order: 1,
+    duration: 0
+  }]
 }
 
 // go

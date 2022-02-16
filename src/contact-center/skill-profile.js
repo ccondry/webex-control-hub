@@ -5,7 +5,8 @@ module.exports = class SkillProfile {
     if (!params.orgId) throw Error('orgId is a required constructor parameter for webex-control-hub/contact-center/skill-profile.')
     if (!params.accessToken) throw Error('accessToken is a required constructor parameter for webex-control-hub/contact-center/skill-profile.')
     this.params = params
-    this.baseUrl = `https://api.wxcc-us1.cisco.com/organization/${this.params.orgId}/skill-profile`
+    // this.baseUrl = `https://api.wxcc-us1.cisco.com/organization/${this.params.orgId}/skill-profile`
+    this.baseUrl = `https://config-service.produs1.ciscoccservice.com/cms/api/organization/${this.params.orgId}/skill-profile`
   }
 
   /**
@@ -133,12 +134,14 @@ module.exports = class SkillProfile {
    * @return {Promise} the fetch promise, which resolves to fetch response body
    */
   update (body) {
+    // console.log('update skill profile', body)
+    body.id = body.id || body.skillId
     const url = `${this.baseUrl}/${body.id}`
     // fix missing body parameters
-    if (typeof body.version === 'undefined') {
-      body.version = 1
-    }
-    body.organizationId = this.params.orgId
+    // if (typeof body.version === 'undefined') {
+    //   body.version = 1
+    // }
+    // body.organizationId = this.params.orgId
     const options = {
       method: 'PUT',
       headers: {

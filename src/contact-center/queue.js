@@ -124,6 +124,7 @@ module.exports = class Queue {
     // if (typeof body.controlFlowScriptUrl === 'undefined') {
     //   body.controlFlowScriptUrl = 'https://flow-control.produs1.ciscoccservice.com/31f1c57f-4fa1-417b-b5c5-6feb6abea062/royal-enfield'
     // }
+    // console.log('updating queue', body)
     const options = {
       method: 'PUT',
       headers: {

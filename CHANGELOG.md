@@ -3,6 +3,14 @@
 Dates are in YYYY-MM-DD format
 
 
+# 1.11.0 (2022-02-17)
+
+### Features
+* **Contact Center:** Add desktop layout class.
+* **Contact Center:** Update multimedia profile and skill classes like skill
+profile.
+
+
 # 1.10.0 (2022-02-17)
 
 ### Features

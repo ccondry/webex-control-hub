@@ -3,6 +3,14 @@
 Dates are in YYYY-MM-DD format
 
 
+# 1.10.0 (2022-02-17)
+
+### Features
+* **Contact Center:** Add some of the new Contact Center provision APIs from
+wcc-config site to get, list, list all, find, and update skills, skill profiles,
+queues, teams and users.
+
+
 # 1.9.1 (2021-10-30)
 
 ### Fixes

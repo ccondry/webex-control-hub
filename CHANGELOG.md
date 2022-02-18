@@ -3,6 +3,14 @@
 Dates are in YYYY-MM-DD format
 
 
+# 1.12.0 (2022-02-18)
+
+### Features
+* **Calling:** Add calling class.
+* **Number:** Add calling.number class.
+* **Contact Center:** Add classes for agent profile and user profile.
+
+
 # 1.11.0 (2022-02-17)
 
 ### Features

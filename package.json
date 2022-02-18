@@ -6,7 +6,9 @@
   "scripts": {
     "test": "node test",
     "test:queue": "mocha test/queue --timeout 20000",
-    "test:skill-profile": "mocha test/skill-profile --timeout 20000"
+    "test:calling": "mocha test/calling --timeout 20000",
+    "test:skill-profile": "mocha test/skill-profile --timeout 20000",
+    "test:agent-profile": "mocha test/agent-profile --timeout 20000"
   },
   "repository": "https://github.com/ccondry/webex-control-hub.git",
   "author": "Coty Condry <ccondry@cisco.com>",

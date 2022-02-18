@@ -14,6 +14,8 @@ const MultimediaProfile = require('./multimedia-profile')
 const Queue = require('./queue')
 const Site = require('./site')
 const DesktopLayout = require('./desktop-layout')
+const UserProfile = require('./user-profile')
+const AgentProfile = require('./agent-profile')
 
 module.exports = class ContactCenter {
   constructor (params) {
@@ -37,5 +39,7 @@ module.exports = class ContactCenter {
     this.queue = new Queue(this.params)
     this.site = new Site(this.params)
     this.desktopLayout = new DesktopLayout(this.params)
+    this.userProfile = new UserProfile(this.params)
+    this.agentProfile = new AgentProfile(this.params)
   }
 }

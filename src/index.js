@@ -1,6 +1,7 @@
+const Calling = require('./calling')
 const ContactCenter = require('./contact-center')
-const User = require('./user')
 const Org = require('./org')
+const User = require('./user')
 
 module.exports = class {
   constructor ({
@@ -13,8 +14,9 @@ module.exports = class {
       orgId,
       accessToken
     }
+    this.calling = new Calling(this.params)
     this.contactCenter = new ContactCenter(this.params)
-    this.user = new User(this.params)
     this.org = new Org(this.params)
+    this.user = new User(this.params)
   }
 }

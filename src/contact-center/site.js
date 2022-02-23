@@ -5,7 +5,8 @@ module.exports = class Site {
     if (!params.orgId) throw Error('orgId is a required constructor parameter for webex-control-hub/contact-center/site.')
     if (!params.accessToken) throw Error('accessToken is a required constructor parameter for webex-control-hub/contact-center/site.')
     this.params = params
-    this.baseUrl = `https://api.wxcc-us1.cisco.com/organization/${this.params.orgId}/site`
+    // this.baseUrl = `https://api.wxcc-us1.cisco.com/organization/${this.params.orgId}/site`
+    this.baseUrl = `https://config-service.produs1.ciscoccservice.com/cms/api/organization/${this.params.orgId}/site`
   }
 
   /**

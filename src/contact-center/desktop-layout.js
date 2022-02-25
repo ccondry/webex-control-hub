@@ -62,11 +62,11 @@ module.exports = class DesktopLayout {
   }
 
   /**
-   * Find desktop layout by name
+   * Find desktop layout
    * @return {Promise} the fetch promise, which resolves to desktop layout JSON
    * object when successful or null if not found
    */
-  async find ({name}) {
+   async find (query) {
     try {
       let found = null
       let page = 0
@@ -77,7 +77,17 @@ module.exports = class DesktopLayout {
         // keep looking
         let list = await this.list(page, pageSize)
         // look for item in the current list
-        found = list.find(item => item.name === name)
+        found = list.find(item => {
+          // filter out if item does not match all query parameters
+          for (const key of Object.keys(query)) {
+            const value = query[key]
+            if (item[key] !== value) {
+              return false
+            }
+          }
+          // keep if all query parameters matched
+          return true
+        })
         // did we reach the end of the total results?
         atEnd = list.length < pageSize
         // increment page for next iteration

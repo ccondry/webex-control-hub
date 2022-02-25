@@ -198,12 +198,12 @@ async function main (id) {
   // }
 
   // static strings
+  const siteName = 'dCloud_Site'
   const skillName = 'dCloud_Default_Skill'
   const multimediaProfileName = 'dCloud_Profile'
   const voiceQueueName = 'dCloud_Voice_Queue'
   const chatQueueName = 'Q_Chat_dCloud'
   const emailQueueName = 'IMI_Queue_Email'
-  const siteName = 'dCloud_Site'
   const skillProfileTemplateName = 'Skill_Profile_Provision_Template'
   const teamTemplateName = 'Team_Provision_Template'
 
@@ -255,6 +255,7 @@ async function main (id) {
   if (!rick) {
     throw Error(`User ${rickEmail} was not found. Cannot continue provisioning user ${id}`)
   }
+  
   // find sandra
   const sandraEmail = `sjeffers${id}@cc.dc-01.com`
   const sandra = users.find(user => user.email === sandraEmail)
@@ -348,6 +349,7 @@ async function main (id) {
         siteName: site.name,
         siteId: site.id
       }
+      console.log(body)
 
       team = await client.contactCenter.team.update(body)
     } catch (e) {
@@ -379,6 +381,7 @@ async function main (id) {
       siteName: site.name,
       siteId: site.id
     }
+    console.log(body)
     team = await client.contactCenterteam.create(body)
   }
 

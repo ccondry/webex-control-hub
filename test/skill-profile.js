@@ -14,24 +14,26 @@ let body = null
 Skill Profile
 ***********/
 // create
-// describe('client.contactCenter.skillProfile.create(body)', function () {
-//   it('create Contact Center Skill Profile', function (done) {
-//     client.contactCenter.skillProfile.create({
-//       name: 'mocha test 2',
-//       description: 'mocha test 2',
-//       activeSkills: [{
-//         id: '20e8457f-3928-4b26-af4d-b8f0507f2d00',
-//         textValue: 'mocha',
-//         skillId: 'f52eb944-7ec4-4cdc-b208-22f242b1868e'
-//       }]
-//     })
-//     .then(response => {
-//       console.log(response)
-//       done()
-//     })
-//     .catch(done)
-//   })
-// })
+describe('client.contactCenter.skillProfile.create(body)', function () {
+  it('create Contact Center Skill Profile', function (done) {
+    client.contactCenter.skillProfile.create({
+      name: 'mocha test 3',
+      description: 'mocha test 3',
+      organizationId: process.env.ORG_ID,
+      activeSkills: [{
+        // id: '20e8457f-3928-4b26-af4d-b8f0507f2d00',
+        organizationId: process.env.ORG_ID,
+        textValue: 'mocha3',
+        skillId: 'f52eb944-7ec4-4cdc-b208-22f242b1868e'
+      }]
+    })
+    .then(response => {
+      console.log(response)
+      done()
+    })
+    .catch(done)
+  })
+})
 
 // list
 describe('client.contactCenter.skillProfile.list()', function () {

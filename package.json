@@ -8,7 +8,14 @@
     "test:queue": "mocha test/queue --timeout 20000",
     "test:calling": "mocha test/calling --timeout 20000",
     "test:skill-profile": "mocha test/skill-profile --timeout 20000",
-    "test:agent-profile": "mocha test/agent-profile --timeout 20000"
+    "test:agent-profile": "mocha test/agent-profile --timeout 20000",
+    "test:desktop-layout": "mocha test/desktop-layout --timeout 20000",
+    "test:role": "mocha test/role --timeout 20000",
+    "test:ch-user": "mocha test/ch-user --timeout 20000",
+    "test:user": "mocha test/user --timeout 20000",
+    "test:site": "mocha test/site --timeout 20000",
+    "test:team": "mocha test/team --timeout 20000",
+    "test:user-profile": "mocha test/user-profile --timeout 20000"
   },
   "repository": "https://github.com/ccondry/webex-control-hub.git",
   "author": "Coty Condry <ccondry@cisco.com>",

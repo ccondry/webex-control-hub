@@ -5,7 +5,8 @@ module.exports = class User {
     if (!params.orgId) throw Error('orgId is a required constructor parameter for webex-control-hub/contact-center/user.')
     if (!params.accessToken) throw Error('accessToken is a required constructor parameter for webex-control-hub/contact-center/user.')
     this.params = params
-    this.baseUrl = 'https://api.wxcc-us1.cisco.com'
+    // this.baseUrl = 'https://api.wxcc-us1.cisco.com'
+    this.baseUrl = `https://config-service.produs1.ciscoccservice.com/cms/api/organization/${this.params.orgId}/user`
   }
 
   /**
@@ -15,7 +16,7 @@ module.exports = class User {
    */
   async list (page = 0, pageSize = 100) {
     try {
-      const url = `${this.baseUrl}/organization/${this.params.orgId}/user`
+      const url = this.baseUrl
       const options = {
         query: {
           page,
@@ -99,7 +100,7 @@ module.exports = class User {
    * object when successful
    */
   get (id) {
-    const url = `${this.baseUrl}/organization/${this.params.orgId}/user/${id}`
+    const url = `${this.baseUrl}/${id}`
     const options = {
       headers: {
         Authorization: 'Bearer ' + this.params.accessToken
@@ -118,7 +119,7 @@ module.exports = class User {
     description = ''
   }) {
     try {
-      const url = `${this.baseUrl}/organization/${this.params.orgId}/user`
+      const url = this.baseUrl
       const options = {
         method: 'POST',
         headers: {
@@ -138,52 +139,11 @@ module.exports = class User {
   }
 
   /**
-   * update a user using same parameters as create
+   * update (replace) a user
    * @return {Promise} the fetch promise, which resolves to fetch response body
    */
-  async update ({
-    name,
-    skillId,
-    textValue,
-    description,
-    booleanValue,
-    proficiencyValue
-  }, existing) {
-    try {
-      // find existing record if not provided
-      if (!existing) {
-        existing = await this.find({name})
-      }
-      if (!existing) {
-        throw Error('cannot update user - ', name, 'does not exist')
-      }
-      const url = `${this.baseUrl}/organization/${this.params.orgId}/user/${existing.id}`
-      if (name) existing.name = name
-      if (description) existing.description = description
-      const skill = existing.activeSkills[0]
-      if (skillId) skill.skillId = skillId
-      if (textValue) skill.textValue = textValue
-      if (booleanValue) skill.booleanValue = booleanValue
-      if (proficiencyValue) skill.proficiencyValue = proficiencyValue
-      const options = {
-        method: 'PUT',
-        headers: {
-          Authorization: 'Bearer ' + this.params.accessToken
-        },
-        body: existing
-      }
-      return fetch(url, options)
-    } catch (e) {
-      throw e
-    }
-  }
-
-  /**
-   * replace a user
-   * @return {Promise} the fetch promise, which resolves to fetch response body
-   */
-  replace (body) {
-    const url = `${this.baseUrl}/organization/${this.params.orgId}/user/${body.id}`
+  update (id, body) {
+    const url = `${this.baseUrl}/${id}`
     const options = {
       method: 'PUT',
       headers: {
@@ -193,38 +153,4 @@ module.exports = class User {
     }
     return fetch(url, options)
   }
-
-  /**
-   * patch a user
-   * @return {Promise} the fetch promise, which resolves to fetch response body
-   */
-  patch (body) {
-    const url = `${this.baseUrl}/organization/${this.params.orgId}/user/${body.id}`
-    const options = {
-      method: 'PATCH',
-      headers: {
-        Authorization: 'Bearer ' + this.params.accessToken,
-        'Content-Type': 'application/merge-patch+json'
-      },
-      body
-    }
-    return fetch(url, options)
-  }
-
-  /**
-   * delete a user
-   * @return {Promise} the fetch promise, which resolves to fetch response body
-   */
-  // this does not work, it is disabled on API side with inaccessible foreign-
-  // key constraint
-  // remove (id) {
-  //   const url = `${this.baseUrl}/organization/${this.params.orgId}/user/${id}`
-  //   const options = {
-  //     method: 'DELETE',
-  //     headers: {
-  //       Authorization: 'Bearer ' + this.params.accessToken
-  //     }
-  //   }
-  //   return fetch(url, options)
-  // }
 }

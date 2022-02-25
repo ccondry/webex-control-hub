@@ -3,6 +3,15 @@
 Dates are in YYYY-MM-DD format
 
 
+# 1.13.0 (2022-02-25)
+
+### Features
+* **Contact Center:** Use config-service URL for site, improve
+desktopLayout.find to search any parameters, simplify user.update
+### Fixes
+* **Contact Center:** Fix skill.listAll
+
+
 # 1.12.0 (2022-02-18)
 
 ### Features

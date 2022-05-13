@@ -3,6 +3,12 @@
 Dates are in YYYY-MM-DD format
 
 
+# 1.13.1 (2022-05-13)
+
+### Fixes
+* **Contact Center:** Reduce debug logging in calling.number.list()
+
+
 # 1.13.0 (2022-02-25)
 
 ### Features

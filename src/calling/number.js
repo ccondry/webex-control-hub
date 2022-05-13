@@ -45,7 +45,7 @@ module.exports = class Number {
       }
       // console.log(url, options)
       const response = await fetch(url, options)
-      console.log(response)
+      // console.log(response)
       return response.numbers
     } catch (e) {
       throw e

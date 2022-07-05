@@ -13,7 +13,7 @@ module.exports = class Skill {
    * @return {Promise} the fetch promise, which resolves to skills JSON
    * array when successful
    */
-  async list (page, pageSize) {
+  async list (page = 0, pageSize = 100) {
     try {
       const url = `${this.baseUrl}/organization/${this.params.orgId}/skill`
       const options = {

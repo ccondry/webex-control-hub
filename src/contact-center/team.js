@@ -14,12 +14,16 @@ module.exports = class Team {
    * @return {Promise} the fetch promise, which resolves to teams JSON
    * array when successful
    */
-  async list () {
+   async list (page = 0, pageSize = 100) {
     try {
       const url = this.baseUrl
       const options = {
         headers: {
           Authorization: 'Bearer ' + this.params.accessToken
+        },
+        query: {
+          page,
+          pageSize
         }
       }
       const response = await fetch(url, options)

@@ -3,6 +3,14 @@
 Dates are in YYYY-MM-DD format
 
 
+# 1.13.2 (2022-06-05)
+
+### Fixes
+* **Contact Center:** Add missing input parameters for page and pageSize in 
+skill.list() and team.list(), which fixes infinite loops in skill.find() and
+team.find() when the object is not found within the first 100 results.
+
+
 # 1.13.1 (2022-05-13)
 
 ### Fixes

@@ -3,6 +3,13 @@
 Dates are in YYYY-MM-DD format
 
 
+# 1.14.0 (2023-1-27)
+
+### Features
+* **Audit:** Add audit module with listEvents, listAllEvents, and
+listEventCategories methods.
+
+
 # 1.13.2 (2022-06-05)
 
 ### Fixes

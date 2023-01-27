@@ -1,3 +1,4 @@
+const Audit = require('./audit')
 const Calling = require('./calling')
 const ContactCenter = require('./contact-center')
 const Org = require('./org')
@@ -14,6 +15,7 @@ module.exports = class {
       orgId,
       accessToken
     }
+    this.audit = new Audit(this.params)
     this.calling = new Calling(this.params)
     this.contactCenter = new ContactCenter(this.params)
     this.org = new Org(this.params)

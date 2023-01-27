@@ -38,9 +38,9 @@ module.exports = class Audit {
         ...this.baseOptions,
         method: 'POST',
         body: {
-          endTime: new Date(endTime).toISOString(),
           language: "en_US",
-          startTime: new Date(startTime).toISOString(),
+          endTime,
+          startTime,
           pagination: {
             limit,
             offset

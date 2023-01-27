@@ -3,6 +3,15 @@
 Dates are in YYYY-MM-DD format
 
 
+# 1.14.1 (2023-1-27)
+
+### Features
+* **Audit:** Expect ISO date string as startTime and endTime inputs to
+listEvents and listAllEvents. Library will no longer convert or format these
+inputs. Allow language to be set in listEventCategories input parmeters. Add
+limit parameter to listAllEvents inputs with default value 1000.
+
+
 # 1.14.0 (2023-1-27)
 
 ### Features

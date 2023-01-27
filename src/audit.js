@@ -30,7 +30,8 @@ module.exports = class Audit {
     endTime,
     limit = 100,
     offset = 0,
-    eventCategory = []
+    eventCategory = [],
+    language = 'en_US'
   }) {
     const url = `${this.baseUrl}/organizations/${this.params.orgId}/events/merged`
     try {
@@ -38,8 +39,8 @@ module.exports = class Audit {
         ...this.baseOptions,
         method: 'POST',
         body: {
-          language: "en_US",
           endTime,
+          language,
           startTime,
           pagination: {
             limit,

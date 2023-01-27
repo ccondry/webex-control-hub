@@ -59,11 +59,12 @@ module.exports = class Audit {
   async listAllEvents ({
     startTime,
     endTime,
-    eventCategory
+    eventCategory,
+    limit = 1000
   }) {
     try {
       let offset = 0
-      let limit = 100
+      let pageLimit = 100
       let atEnd = false
       const data = []
       // while item is not found and last page of results has not been reached
@@ -74,14 +75,14 @@ module.exports = class Audit {
           endTime,
           eventCategory,
           offset, 
-          limit
+          limit: pageLimit
         })
         // add results to return data array
         data.push(...list)
-        // did we reach the end of the total results?
-        atEnd = list.length < limit
+        // did we reach the end of the total results or the end of requested limit?
+        atEnd = list.length < pageLimit || data.length >= limit
         // increment page for next iteration
-        offset += limit
+        offset += pageLimit
       }
       // return results
       return data

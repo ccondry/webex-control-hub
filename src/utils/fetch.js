@@ -69,7 +69,7 @@ module.exports = async function (url, options = {}) {
         // continue
         // console.log(e)
       }
-      const error = Error(`${response.status} ${response.statusText} - ${message}`)
+      const error = new Error(`${response.status} ${response.statusText} - ${message}`)
       error.status = response.status
       error.statusText = response.statusText
       error.text = message

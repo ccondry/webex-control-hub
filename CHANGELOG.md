@@ -3,6 +3,12 @@
 Dates are in YYYY-MM-DD format
 
 
+# 1.15.0 (2023-2-5)
+
+### Features
+* **User:** Add user.modifyRoles method.
+
+
 # 1.14.2 (2023-2-5)
 
 ### Fixes

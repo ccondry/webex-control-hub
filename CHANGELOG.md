@@ -3,6 +3,14 @@
 Dates are in YYYY-MM-DD format
 
 
+# 1.14.2 (2023-2-5)
+
+### Fixes
+* **Fetch:** Don't send "undefined" as a string value for an undefined query
+parameter.
+* **User:** Allow query parameter in user.listAll input.
+
+
 # 1.14.1 (2023-1-27)
 
 ### Features

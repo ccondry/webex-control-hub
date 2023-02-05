@@ -13,7 +13,7 @@ module.exports = class User {
   * @return {Promise} the fetch promise, which resolves to users JSON array when
   * successful
   */
-  async list (query) {
+  async list (query = {}) {
     const url = `https://identity.webex.com/identity/scim/${this.params.orgId}/v1/Users`
     // build default user attributes to retrieve
     const attributes = [
@@ -48,7 +48,6 @@ module.exports = class User {
       startIndex: 0
     }
     // overwrite default query options with those from input
-    query = query || {}
     options.query = {...defaultQuery, ...query}
     return fetch(url, options)
   }
@@ -58,14 +57,14 @@ module.exports = class User {
   * @return {Promise} the fetch promise, which resolves to users JSON array when
   * successful
   */
-  async listAll () {
+  async listAll (query = {}) {
     let count = 100
     let startIndex = 1
     // just a number to get the while loop started
     let totalResults = 100
     const ret = []
     while (startIndex <= totalResults) {
-      const results = await this.list({startIndex, count})
+      const results = await this.list({...query, startIndex, count})
       // add result data to return array
       ret.push.apply(ret, results.Resources)
       totalResults = parseInt(results.totalResults)

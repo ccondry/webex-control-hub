@@ -140,4 +140,42 @@ module.exports = class User {
     }
     return fetch(url, options)
   }
+
+  /**
+  * Modify a user's roles using Atlas
+  * @param {String} email the email address (userName) of the user to modify
+  * @param {Object[]} roles the Control Hub roles to modify. expect like [{"roleName": "Readonly_Admin", "roleState": "ACTIVE"}]
+  * @return {Promise} the fetch promise, which resolves to modified user data
+  * successful
+  */
+  async modifyRoles ({email, roles}) {
+    // get atlas base URL
+    // const atlas = get_control_hub_url('atlas', this.params.orgId, this.params.accessToken)
+    const atlas = 'https://atlas-a.wbx2.com/admin/api/v1'
+  
+    // build full URL
+    const url = `${atlas}/organization/${this.params.orgId}/users/roles`
+
+    // build headers
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + this.params.accessToken
+    }
+
+    // build body for REST call to Control Hub
+    const body = {
+      users: [{
+        email,
+        userRoles: roles
+      }]
+    }
+    
+    const options = {
+      method: 'PATCH',
+      headers,
+      body
+    }
+    // send REST request and return its promise
+    return fetch(url, options)
+  }
 }
